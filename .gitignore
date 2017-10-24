@@ -10,8 +10,8 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
-sdj2Project/.idea
-sdj2Project/.idea/*
+SDJ2Project/.idea
+SDJ2Project/.idea/*
 .idea
 .idea/*
 
