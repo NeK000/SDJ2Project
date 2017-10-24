@@ -21,6 +21,7 @@ public class Server {
     }
 
     public void startServer() {
+        System.out.println("Server starting ...");
         while (true) {
             try {
                 Connection newClient = new Connection(serverSocket.accept());
@@ -31,6 +32,11 @@ public class Server {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void main(String[] args) {
+        Server newServer = new Server();
+        newServer.startServer();
     }
 
 

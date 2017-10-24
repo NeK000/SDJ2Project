@@ -32,6 +32,7 @@ public class Connection implements Runnable {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
+
             if (newRequest.getType().equals("INSERT")) {
                 System.out.println("Inserting into database");
                 for (Runnable asd : Server.clientList) {
