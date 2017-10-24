@@ -1,4 +1,4 @@
-Semester 2 project
+SDJ 2 project
 
 By:
 
