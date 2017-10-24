@@ -15,6 +15,7 @@ SDJ2Project/.idea/*
 .idea
 .idea/*
 
+.iml
 # Package Files #
 *.jar
 *.war
