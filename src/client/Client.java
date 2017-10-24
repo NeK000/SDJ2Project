@@ -18,18 +18,21 @@ public class Client implements Serializable {
 
     public Client(String url, int port) {
         try {
+            System.out.println("Connecting ...");
             clientSocket = new Socket(url, port);
-            in = new ObjectInputStream(clientSocket.getInputStream());
-            out = new ObjectOutputStream(clientSocket.getOutputStream());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
+        System.out.println("              Connected");
     }
 
     public void sendRequest(Request request) {
         try {
+            System.out.println("Sending....");
+            out = new ObjectOutputStream(clientSocket.getOutputStream());
+
             out.writeObject(request);
+            System.out.println("Sent");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -40,9 +43,9 @@ public class Client implements Serializable {
 
         try {
             while (true) {
-
+                in = new ObjectInputStream(clientSocket.getInputStream());
                 response = (Response) in.readObject();
-                System.out.println("response");
+                System.out.println(response.toString());
             }
 
         } catch (Exception e) {
@@ -53,7 +56,7 @@ public class Client implements Serializable {
     }
 
     public static void main(String[] args) {
-        Request request = new Request("bla", new Reservation());
+        Request request = new Request("INSERT", new Reservation());
         Client c = new Client("10.152.204.38", 6789);
         c.sendRequest(request);
         c.receiveResponse();
