@@ -1,9 +1,7 @@
 package client;
 
-
-import server.Request;
-import server.Reservation;
-import server.Response;
+import common.Request;
+import common.Response;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -26,9 +24,12 @@ public class Client implements Serializable {
         System.out.println("              Connected");
     }
 
-    public void sendRequest(Request request) {
+    public void sendRequest(Request request, Model model) {
+        System.out.println("sendRequest called");
+
+
         try {
-            System.out.println("Sending....");
+            System.out.println("Sending...." + request);
             out = new ObjectOutputStream(clientSocket.getOutputStream());
 
             out.writeObject(request);
@@ -36,6 +37,23 @@ public class Client implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        new Thread(() -> {
+            try {
+                Response response;
+                in = new ObjectInputStream(clientSocket.getInputStream());
+                response = (Response) in.readObject();
+                if (response.getResponse().equals("ALLRESERVATIONS")) {
+                    model.setAllReservations(response.getAllParameters());
+                }
+
+                // ToDO: keep the connection opened or it will throw an error on the client
+                Thread.sleep(10000);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     public void receiveResponse() {
@@ -53,12 +71,5 @@ public class Client implements Serializable {
         }
 
 
-    }
-
-    public static void main(String[] args) {
-        Request request = new Request("INSERT", new Reservation());
-        Client c = new Client("10.152.204.38", 6789);
-        c.sendRequest(request);
-        c.receiveResponse();
     }
 }
