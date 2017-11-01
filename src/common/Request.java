@@ -1,4 +1,4 @@
-package server;
+package common;
 
 import java.io.Serializable;
 
@@ -17,5 +17,13 @@ public class Request implements Serializable {
 
     public Reservation getParameter() {
         return parameter;
+    }
+
+    @Override
+    public String toString() {
+        return "Request{" +
+                "request='" + request + '\'' +
+                ", parameter=" + parameter +
+                '}';
     }
 }

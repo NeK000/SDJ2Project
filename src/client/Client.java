@@ -1,9 +1,8 @@
 package client;
 
 
-import server.Request;
-import server.Reservation;
-import server.Response;
+import common.Request;
+import common.Response;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -56,9 +55,9 @@ public class Client implements Serializable {
     }
 
     public static void main(String[] args) {
-        Request request = new Request("INSERT", new Reservation());
-        Client c = new Client("10.152.204.38", 6789);
-        c.sendRequest(request);
-        c.receiveResponse();
+//        Request request = new Request("INSERT", new Reservation());
+//        Client c = new Client("10.152.204.38", 6789);
+//        c.sendRequest(request);
+//        c.receiveResponse();
     }
 }

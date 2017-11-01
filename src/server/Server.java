@@ -1,5 +1,7 @@
 package server;
 
+import common.*;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -9,6 +11,9 @@ public class Server {
     private ServerSocket serverSocket;
     private Socket clientSocket;
     private final int PORT = 6789;
+    //    ToDo: verify if fileAdapter works as static
+    private static FileAdapter fileAdapter = new FileAdapter();
+
     public static ArrayList<Runnable> clientList;
 
     public Server() {
@@ -18,6 +23,15 @@ public class Server {
             e.printStackTrace();
         }
         clientList = new ArrayList<>();
+    }
+
+    public synchronized static void createReservation(Reservation reservation) {
+        System.out.println(reservation.toString());
+        fileAdapter.createReservation("reservations.bin", reservation);
+    }
+
+    public synchronized static ArrayList<Reservation> getAll() {
+        return fileAdapter.getAll("reservations.bin");
     }
 
     public void startServer() {
@@ -38,6 +52,4 @@ public class Server {
         Server newServer = new Server();
         newServer.startServer();
     }
-
-
 }
