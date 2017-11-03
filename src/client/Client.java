@@ -14,6 +14,7 @@ public class Client implements Serializable {
     private ObjectInputStream in;
     private ObjectOutputStream out;
 
+
     public Client(String url, int port) {
         try {
             System.out.println("Connecting ...");
@@ -30,7 +31,9 @@ public class Client implements Serializable {
 
         try {
             System.out.println("Sending...." + request);
-            out = new ObjectOutputStream(clientSocket.getOutputStream());
+            if (out == null) {
+                out = new ObjectOutputStream(clientSocket.getOutputStream());
+            }
 
             out.writeObject(request);
             System.out.println("Sent");
@@ -38,22 +41,33 @@ public class Client implements Serializable {
             e.printStackTrace();
         }
 
-        new Thread(() -> {
-            try {
-                Response response;
-                in = new ObjectInputStream(clientSocket.getInputStream());
-                response = (Response) in.readObject();
-                if (response.getResponse().equals("ALLRESERVATIONS")) {
-                    model.setAllReservations(response.getAllParameters());
+        if (in == null) {
+            new Thread(() -> {
+//
+
+                // TODO MODEL IS PASSED AS NULL
+
+
+                try {
+                    in = new ObjectInputStream(clientSocket.getInputStream());
+                    while (true) {
+                        Response response;
+                        response = (Response) in.readObject();
+
+                        if (response.getResponse().toLowerCase().equals("update reservation")) {
+                            model.updateReservation(response.getAllParameters());
+                        }
+
+                        if (response.getResponse().toLowerCase().equals("allreservations")) {
+                            System.out.println("recieved from server " + response);
+                            model.setAllReservations(response.getAllParameters());
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-                // ToDO: keep the connection opened or it will throw an error on the client
-                Thread.sleep(10000);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
+            }).start();
+        }
     }
 
     public void receiveResponse() {

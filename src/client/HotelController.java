@@ -21,7 +21,7 @@ public class HotelController implements Serializable {
     public HotelController() {
         model = new Model();
         //"10.152.204.9"
-        client = new Client("10.152.204.9", 6789);
+        client = new Client("10.152.196.98", 6789);
     }
 //    private common.Price price;
 //    private FileAdapter fileAdapter;
@@ -92,7 +92,7 @@ public class HotelController implements Serializable {
 
 
         // toDO: should call the client
-        client.sendRequest(new Request("create reservation", reservation), null);
+        client.sendRequest(new Request("create reservation", reservation), model);
     }
 
     public Reservation[] getAllReservations() {
@@ -102,6 +102,16 @@ public class HotelController implements Serializable {
         }
 
         return model.getAllReservations();
+    }
+
+    public Reservation getReservation(Reservation r) {
+        return model.getReservation(r);
+    }
+
+    public void updateReservation(Reservation old_, Reservation new_) {
+        Reservation[] param = new Reservation[]{old_, new_};
+        Request req = new Request("update reservation", param, true);
+        client.sendRequest(req, null);
     }
 
     public Model getModel() {

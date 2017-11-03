@@ -1,5 +1,8 @@
 package client;
 
+import common.FakeGuest;
+import common.Reservation;
+
 import java.util.Arrays;
 
 public class View {
@@ -17,12 +20,11 @@ public class View {
 
     public void getAllReservations() {
 
-        controller.getAllReservations();
 
-//        FakeGuest f = new FakeGuest();
-//        Reservation r = f.makeNewReservation();
 
-//        controller.createReservation(r);
+        FakeGuest f = new FakeGuest();
+        Reservation r = f.makeNewReservation();
+        controller.createReservation(r);
 
         try {
             Thread.sleep(2000);
@@ -30,6 +32,14 @@ public class View {
             e.printStackTrace();
         }
 
+        controller.getAllReservations();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+//
         common.Reservation[] all = controller.getAllReservations();
 
         System.out.println("we got - > " + Arrays.toString(all));
