@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Observable;
 
 public class Server implements OurObservable {
@@ -29,6 +30,7 @@ public class Server implements OurObservable {
     public synchronized static void createReservation(Reservation reservation) {
         System.out.println(reservation.toString());
         fileAdapter.createReservation("reservations.bin", reservation);
+
     }
 
     public synchronized static ArrayList<Reservation> getAll() {
@@ -36,10 +38,12 @@ public class Server implements OurObservable {
     }
 
     public synchronized static void updateReservation(Reservation old, Reservation newOne) {
+//        System.out.println(old.toString());
+//        System.out.println(newOne.toString());
         fileAdapter.updateReservation(old, newOne);
     }
 
-    public void startServer() {
+    private void startServer() {
         System.out.println("Server starting ...");
         while (true) {
             try {
@@ -53,11 +57,6 @@ public class Server implements OurObservable {
         }
     }
 
-    public static void main(String[] args) {
-        Server newServer = new Server();
-        newServer.startServer();
-    }
-
 
     @Override
     public void addObserver(Connection addClient) {
@@ -67,25 +66,26 @@ public class Server implements OurObservable {
 
     @Override
     public void updateAll(Reservation reservation) throws IOException {
+        System.out.println("Sending updates");
         for (Connection item : clientList
                 ) {
             new Thread(() -> {
                 try {
+                    System.out.println(item.toString());
                     item.getOutputStream().writeObject(new Response("create reservation", reservation));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }).start();
-
         }
     }
 
     @Override
     public void updateAll(Reservation old, Reservation newOne) throws IOException {
         Reservation[] res = {old, newOne};
+        System.out.println("Sending updates");
         for (Connection item : clientList
                 ) {
-
             new Thread(() -> {
                 try {
                     item.getOutputStream().writeObject(new Response("update reservation", res));
@@ -96,4 +96,8 @@ public class Server implements OurObservable {
         }
     }
 
+    public static void main(String[] args) {
+        Server newServer = new Server();
+        newServer.startServer();
+    }
 }
