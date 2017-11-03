@@ -12,9 +12,9 @@ public class Request implements Serializable {
         this.parameter = reservation;
     }
 
-    public Request(String request, Reservation[] reservations) {
+    public Request(String request, Reservation[] reservations, boolean isArray) {
         this.request = request;
-        this.reservations = reservations;
+        this.reservations =reservations;
     }
 
     public String getType() {
