@@ -128,7 +128,10 @@ public class FileAdapter implements Serializable {
             e.printStackTrace();
         }
     }
-
+    public void updateReservation(Reservation old, Reservation newOne){
+        removeSingleObjectFromFile("reservations.bin", old);
+        writeToFileObj("reservations.bin",newOne);
+    }
 //    public static void main(String[] args) {
 //        FileAdapter james = new FileAdapter();
 //        Reservation first = new Reservation(new Guest(new Name("steven", "george", "someGuy"), 1234278901, new Address("Romania", "SomeCity", "8700", "someStreet"), "Romanian",
