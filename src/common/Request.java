@@ -5,10 +5,16 @@ import java.io.Serializable;
 public class Request implements Serializable {
     private String request;
     private Reservation parameter;
+    private Reservation[] reservations;
 
     public Request(String request, Reservation reservation) {
         this.request = request;
         this.parameter = reservation;
+    }
+
+    public Request(String request, Reservation[] reservations) {
+        this.request = request;
+        this.reservations = reservations;
     }
 
     public String getType() {
@@ -19,9 +25,17 @@ public class Request implements Serializable {
         return parameter;
     }
 
+    public Reservation[] getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(Reservation[] reservations) {
+        this.reservations = reservations;
+    }
+
     @Override
     public String toString() {
-        return "Request{" +
+        return "common.Request{" +
                 "request='" + request + '\'' +
                 ", parameter=" + parameter +
                 '}';
