@@ -26,9 +26,6 @@ public class Client implements Serializable {
     }
 
     public void sendRequest(Request request, Model model) {
-        System.out.println("sendRequest called");
-
-
         try {
             System.out.println("Sending...." + request);
             if (out == null) {
@@ -53,6 +50,8 @@ public class Client implements Serializable {
                     while (true) {
                         Response response;
                         response = (Response) in.readObject();
+
+                        System.out.println("response from server: " + response.getResponse());
 
                         if (response.getResponse().toLowerCase().equals("update reservation")) {
                             model.updateReservation(response.getAllParameters());

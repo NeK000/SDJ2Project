@@ -3,7 +3,7 @@ package common;
 import java.io.Serializable;
 
 /**
- * A class containing reservation which later on will be used from the HotelManager.
+ * A class containing reservation which later on will be used from the client.HotelController.
  * @author Nikolay D Nikolav, Yusuf A Farah, Radu G Orleanu, Catalin Udrea
  * @version 1.0
  */
@@ -18,7 +18,7 @@ public class Reservation implements Serializable {
     private int roomNumber;
 
     /**
-     * Constructor initializing Address
+     * Constructor initializing common.Address
      *
      * @param guest             for initializing inside the constructor.
      * @param arrival           for initializing inside the constructor.
@@ -42,7 +42,7 @@ public class Reservation implements Serializable {
     /**
      * Get guest for reservation.
      *
-     * @return guest Guest for reservation.
+     * @return guest common.Guest for reservation.
      */
     public Guest getGuest() {
         return guest;
@@ -51,7 +51,7 @@ public class Reservation implements Serializable {
     /**
      * Set guest for reservation.
      *
-     * @param guest takes Guest for reservation.
+     * @param guest takes common.Guest for reservation.
      */
     public void setGuest(Guest guest) {
         this.guest = guest;
@@ -60,7 +60,7 @@ public class Reservation implements Serializable {
     /**
      * Get arrival for reservation.
      *
-     * @return arrival Arrival for reservation.
+     * @return arrival common.Arrival for reservation.
      */
     public Arrival getArrival() {
         return arrival;
@@ -69,7 +69,7 @@ public class Reservation implements Serializable {
     /**
      * Set arrival for reservation.
      *
-     * @param arrival takes Arrival for reservation.
+     * @param arrival takes common.Arrival for reservation.
      */
     public void setArrival(Arrival arrival) {
         this.arrival = arrival;
@@ -78,7 +78,7 @@ public class Reservation implements Serializable {
     /**
      * Get departure for reservation.
      *
-     * @return departure Departure for reservation.
+     * @return departure common.Departure for reservation.
      */
     public Departure getDeparture() {
         return departure;
@@ -86,7 +86,7 @@ public class Reservation implements Serializable {
 
     /**
      * Set departure for reservation.
-     * @param departure takes Departure for reservation.
+     * @param departure takes common.Departure for reservation.
      */
 
     public void setDeparture(Departure departure) {
@@ -176,7 +176,7 @@ public class Reservation implements Serializable {
 
     /**
      * Get copy of reservation
-     * @return Reservation Reservation copy
+     * @return common.Reservation common.Reservation copy
      */
     public Reservation copy() {
         return new Reservation(guest, arrival, departure, roomType,
@@ -210,7 +210,7 @@ public class Reservation implements Serializable {
      */
     @Override
     public String toString() {
-        return "Reservation{" +
+        return "common.Reservation{" +
                 "guest=" + guest +
                 ", arrival=" + arrival +
                 ", departure=" + departure +

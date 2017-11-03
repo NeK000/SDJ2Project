@@ -18,7 +18,7 @@ public class DateHandler implements Serializable {
     private int year;
 
     /**
-     * Constructor initializing DateHandler
+     * Constructor initializing common.DateHandler
      * @param day  for initializing inside the constructor.
      * @param month  for initializing inside the constructor.
      * @param year  for initializing inside the constructor.
@@ -31,48 +31,48 @@ public class DateHandler implements Serializable {
     }
 
     /**
-     * Get day for all other classes that require DateHandler.
-     * @return day Day for all other classes that require DateHandler.
+     * Get day for all other classes that require common.DateHandler.
+     * @return day Day for all other classes that require common.DateHandler.
      */
     public int getDay() {
         return day;
     }
 
     /**
-     * Set day for all other classes that require DateHandler.
-     * @param day takes day for all other classes that require DateHandler.
+     * Set day for all other classes that require common.DateHandler.
+     * @param day takes day for all other classes that require common.DateHandler.
      */
     public void setDay(int day) {
         this.day = day;
     }
 
     /**
-     * Get month for all other classes that require DateHandler.
-     * @return month Month for all other classes that require DateHandler.
+     * Get month for all other classes that require common.DateHandler.
+     * @return month Month for all other classes that require common.DateHandler.
      */
     public int getMonth() {
         return month;
     }
 
     /**
-     * Set month for all other classes that require DateHandler.
-     * @param month takes month for all other classes that require DateHandler.
+     * Set month for all other classes that require common.DateHandler.
+     * @param month takes month for all other classes that require common.DateHandler.
      */
     public void setMonth(int month) {
         this.month = month;
     }
 
     /**
-     * Get year for all other classes that require DateHandler.
-     * @return year Year for all other classes that require DateHandler.
+     * Get year for all other classes that require common.DateHandler.
+     * @return year Year for all other classes that require common.DateHandler.
      */
     public int getYear() {
         return year;
     }
 
     /**
-     * Set year for all other classes that require DateHandler.
-     * @param year takes year for all other classes that require DateHandler.
+     * Set year for all other classes that require common.DateHandler.
+     * @param year takes year for all other classes that require common.DateHandler.
      */
     public void setYear(int year) {
         this.year = year;
@@ -126,8 +126,8 @@ public class DateHandler implements Serializable {
         return other.year == year;
     }
     /**
-     * Get copy of DateHandler
-     * @return DateHandler DateHandler copy
+     * Get copy of common.DateHandler
+     * @return common.DateHandler common.DateHandler copy
      */
     public DateHandler copy() {
         return new DateHandler(day, month, year);
