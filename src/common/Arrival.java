@@ -11,7 +11,7 @@ public class Arrival implements Serializable {
     private DateHandler checkInDate;
 
     /**
-     * Constructor initializing Arrival
+     * Constructor initializing common.Arrival
      *
      * @param checkInDate for initializing inside the constructor.
      */
@@ -23,7 +23,7 @@ public class Arrival implements Serializable {
     /**
      * Gets the check in date for the reservation.
      *
-     * @return DateHandler, named checkInDate representing the check in date of the reservation.
+     * @return common.DateHandler, named checkInDate representing the check in date of the reservation.
      */
 
     public DateHandler getCheckInDate() {
@@ -41,9 +41,9 @@ public class Arrival implements Serializable {
     }
 
     /**
-     * Gets copy of Arrival
+     * Gets copy of common.Arrival
      *
-     * @return DateHandler, named checkInDate which is a copy of Arrival.
+     * @return common.DateHandler, named checkInDate which is a copy of common.Arrival.
      */
 
     public Arrival copy(){

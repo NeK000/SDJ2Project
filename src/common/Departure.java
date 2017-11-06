@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class Departure implements Serializable {
     private DateHandler checkOutDate;
     /**
-     * Constructor initializing Departure.
+     * Constructor initializing common.Departure.
      * @param checkOutDate for initializing the constructor.
      */
     public Departure(DateHandler checkOutDate){
@@ -32,8 +32,8 @@ public class Departure implements Serializable {
         this.checkOutDate = checkOutDate;
     }
     /**
-     * Get copy of Departure
-     * @return checkOutDate Departure copy.
+     * Get copy of common.Departure
+     * @return checkOutDate common.Departure copy.
      */
     public Departure copy(){
         return new Departure(checkOutDate);

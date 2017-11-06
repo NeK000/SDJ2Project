@@ -9,14 +9,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class Connection implements Runnable {
-
+public class Connection implements Runnable, OurObserver {
+    private Server server;
     private Socket socket;
     private ObjectInputStream inFromClient;
     private ObjectOutputStream outToClient;
 
-    public Connection(Socket socket) {
+    public Connection(Socket socket, Server server) {
         this.socket = socket;
+        this.server = server;
         try {
             inFromClient = new ObjectInputStream(socket.getInputStream());
             outToClient = new ObjectOutputStream(socket.getOutputStream());
@@ -50,7 +51,12 @@ public class Connection implements Runnable {
 //                }
 //            }
             if (newRequest.getType().equalsIgnoreCase("create reservation")) {
-                Server.createReservation(newRequest.getParameter());
+                try {
+                    Server.createReservation(newRequest.getParameter());
+                    updateOne(newRequest.getParameter());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             if (newRequest.getType().equalsIgnoreCase("get all")) {
                 try {
@@ -61,10 +67,69 @@ public class Connection implements Runnable {
                     e.printStackTrace();
                 }
             }
+            if (newRequest.getType().equalsIgnoreCase("Update reservation")) {
+                try {
+                    Server.updateReservation(newRequest.getReservations()[0], newRequest.getReservations()[1]);
+                    updateAll(newRequest.getReservations()[0], newRequest.getReservations()[1]);
+
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+            if (newRequest.getType().equalsIgnoreCase("checkin")) {
+                try {
+                    updateOnInHouse(newRequest.getParameter());
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+            if (newRequest.getType().equalsIgnoreCase("checkout")) {
+                try {
+                    server.addToPastReservations(newRequest.getParameter());
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+            if (newRequest.getType().equalsIgnoreCase("inhouse")) {
+                try {
+                    Reservation[] temp = new Reservation[Server.getAllInHouseGuests().size()];
+                    temp = Server.getAllInHouseGuests().toArray(temp);
+                    getOutputStream().writeObject(new Response("inhouse", temp));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (newRequest.getType().equalsIgnoreCase("past")) {
+                try {
+                    Reservation[] temp = new Reservation[Server.getPastReservations().size()];
+                    temp = Server.getPastReservations().toArray(temp);
+                    getOutputStream().writeObject(new Response("past", temp));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     public ObjectOutputStream getOutputStream() {
         return outToClient;
     }
+
+
+    @Override
+    public void updateAll(Reservation old, Reservation newOne) throws IOException {
+        server.updateAll(old, newOne);
+    }
+
+    @Override
+    public void updateOne(Reservation reservation) throws IOException {
+        server.updateAll(reservation);
+    }
+
+    @Override
+    public void updateOnInHouse(Reservation reservation) throws IOException {
+        server.addToInHouse(reservation);
+    }
+
+
 }

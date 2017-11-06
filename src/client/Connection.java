@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class Connection implements Runnable {
 
@@ -46,7 +47,8 @@ public class Connection implements Runnable {
                 for (Runnable asd : Server.clientList) {
                     Connection c = (Connection) asd;
                     try {
-                        c.getOutputStream().writeObject(new Response("allReservations", r));
+                        System.out.println("sending " + Arrays.toString(r));
+                        c.getOutputStream().writeObject(new Response("ALLRESERVATIONS", r));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

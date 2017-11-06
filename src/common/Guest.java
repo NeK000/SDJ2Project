@@ -16,7 +16,7 @@ public class Guest implements Serializable {
     private String dateOfBirth;
 
     /**
-     * Constructor initializing Guest.
+     * Constructor initializing common.Guest.
      *
      * @param name        for initializing inside the constructor.
      * @param phoneNumber for initializing inside the constructor.
@@ -74,7 +74,7 @@ public class Guest implements Serializable {
     /**
      * Get a address for a guest.
      *
-     * @return address Address for a guest.
+     * @return address common.Address for a guest.
      */
     public Address getAddress() {
         return address;
@@ -128,7 +128,7 @@ public class Guest implements Serializable {
     /**
      * Get copy of a guest.
      *
-     * @return Guest copy of a guest.
+     * @return common.Guest copy of a guest.
      */
     public Guest copy() {
         return new Guest(name, phoneNumber, address, nationality,

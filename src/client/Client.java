@@ -14,6 +14,7 @@ public class Client implements Serializable {
     private ObjectInputStream in;
     private ObjectOutputStream out;
 
+
     public Client(String url, int port) {
         try {
             System.out.println("Connecting ...");
@@ -25,12 +26,11 @@ public class Client implements Serializable {
     }
 
     public void sendRequest(Request request, Model model) {
-        System.out.println("sendRequest called");
-
-
         try {
             System.out.println("Sending...." + request);
-            out = new ObjectOutputStream(clientSocket.getOutputStream());
+            if (out == null) {
+                out = new ObjectOutputStream(clientSocket.getOutputStream());
+            }
 
             out.writeObject(request);
             System.out.println("Sent");
@@ -38,22 +38,51 @@ public class Client implements Serializable {
             e.printStackTrace();
         }
 
-        new Thread(() -> {
-            try {
-                Response response;
-                in = new ObjectInputStream(clientSocket.getInputStream());
-                response = (Response) in.readObject();
-                if (response.getResponse().equals("ALLRESERVATIONS")) {
-                    model.setAllReservations(response.getAllParameters());
+        if (in == null) {
+            new Thread(() -> {
+//
+
+                // TODO MODEL IS PASSED AS NULL -- solved
+
+
+                try {
+                    in = new ObjectInputStream(clientSocket.getInputStream());
+                    while (true) {
+                        Response response;
+                        response = (Response) in.readObject();
+
+                        System.out.println("response from server: " + response.getResponse());
+
+                        if (response.getResponse().toLowerCase().equals("update reservation")) {
+                            model.updateReservation(response.getAllParameters());
+                        }
+
+                        if (response.getResponse().toLowerCase().equals("allreservations")) {
+                            System.out.println("received from server " + response);
+                            model.setReservations(response.getAllParameters());
+                        }
+
+                        if(response.getResponse().toLowerCase().equals("inhouse")) {
+                            System.out.println("received from server for inhouse " + response);
+                            model.setInHouse(response.getAllParameters());
+                        }
+
+                        if(response.getResponse().toLowerCase().equals("past")) {
+                            System.out.println("received from server " + response);
+                            model.setPastReservations(response.getAllParameters());
+                        }
+
+                        if(response.getResponse().toLowerCase().equals("checkin")) {
+                            System.out.println("received from server " + response);
+                            model.checkIn(response.getParameter());
+
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-                // ToDO: keep the connection opened or it will throw an error on the client
-                Thread.sleep(10000);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
+            }).start();
+        }
     }
 
     public void receiveResponse() {

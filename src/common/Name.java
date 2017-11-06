@@ -15,7 +15,7 @@ public class Name implements Serializable {
     private String lastName;
 
     /**
-     * Constructor for initializing Name.
+     * Constructor for initializing common.Name.
      *
      * @param firstName  Constructor takes first name to initialize constructor
      * @param middleName Constructor takes middle name to initialize constructor

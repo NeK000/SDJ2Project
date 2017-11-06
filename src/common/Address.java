@@ -15,7 +15,7 @@ public class Address implements Serializable {
     private String street;
 
     /**
-     * Constructor initializing Address
+     * Constructor initializing common.Address
      *
      * @param country  for initializing inside the constructor.
      * @param city     for initializing inside the constructor.
