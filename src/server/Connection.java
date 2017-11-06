@@ -76,6 +76,38 @@ public class Connection implements Runnable, OurObserver {
                     System.out.println(e.getMessage());
                 }
             }
+            if (newRequest.getType().equalsIgnoreCase("checkin")) {
+                try {
+                    updateOnInHouse(newRequest.getParameter());
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+            if (newRequest.getType().equalsIgnoreCase("checkout")) {
+                try {
+                    server.addToPastReservations(newRequest.getParameter());
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+            if (newRequest.getType().equalsIgnoreCase("inhouse")) {
+                try {
+                    Reservation[] temp = new Reservation[Server.getAllInHouseGuests().size()];
+                    temp = Server.getAllInHouseGuests().toArray(temp);
+                    getOutputStream().writeObject(new Response("inhouse", temp));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (newRequest.getType().equalsIgnoreCase("past")) {
+                try {
+                    Reservation[] temp = new Reservation[Server.getPastReservations().size()];
+                    temp = Server.getPastReservations().toArray(temp);
+                    getOutputStream().writeObject(new Response("past", temp));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -93,4 +125,11 @@ public class Connection implements Runnable, OurObserver {
     public void updateOne(Reservation reservation) throws IOException {
         server.updateAll(reservation);
     }
+
+    @Override
+    public void updateOnInHouse(Reservation reservation) throws IOException {
+        server.addToInHouse(reservation);
+    }
+
+
 }

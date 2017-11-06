@@ -168,7 +168,6 @@ import java.util.ArrayList;
 public class FileAdapter implements Serializable {
     private MyFileIO fileIO = new MyFileIO();
 
-
     /**
      * Writing object to file.
      *
@@ -281,10 +280,30 @@ public class FileAdapter implements Serializable {
             e.printStackTrace();
         }
     }
-    public void updateReservation(Reservation old, Reservation newOne){
+
+    public void updateReservation(Reservation old, Reservation newOne) {
         removeSingleObjectFromFile("reservations.bin", old);
-        writeToFileObj("reservations.bin",newOne);
+        writeToFileObj("reservations.bin", newOne);
     }
+
+    public void checkIn(Reservation old) {
+        removeSingleObjectFromFile("reservations.bin", old);
+        createReservation("inHouseGuests.bin", old);
+    }
+
+    public void checkOut(Reservation old) {
+        removeSingleObjectFromFile("inHouseGuests.bin", old);
+        createReservation("pastReservations.bin", old);
+    }
+
+    public ArrayList<Reservation> getInHouseGuests(){
+        return getAll("inHouseGuests.bin");
+    }
+
+    public ArrayList<Reservation> getPast(){
+        return getAll("pastReservations.bin");
+    }
+
 //    public static void main(String[] args) {
 //        FileAdapter james = new FileAdapter();
 //        Reservation first = new Reservation(new Guest(new Name("steven", "george", "someGuy"), 1234278901, new Address("Romania", "SomeCity", "8700", "someStreet"), "Romanian",

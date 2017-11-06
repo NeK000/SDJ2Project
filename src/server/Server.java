@@ -1,13 +1,12 @@
 package server;
 
-import common.*;
+import common.Reservation;
+import common.Response;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Observable;
 
 public class Server implements OurObservable {
     private ServerSocket serverSocket;
@@ -95,6 +94,46 @@ public class Server implements OurObservable {
                 }
             }).start();
         }
+    }
+
+    @Override
+    public synchronized void addToInHouse(Reservation reservation) throws IOException {
+        fileAdapter.checkIn(reservation);
+        for (Connection item : clientList
+                ) {
+            new Thread(() -> {
+                try {
+                    item.getOutputStream().writeObject(new Response("checkin", reservation));
+                } catch (IOException e) {
+                    //Remove client from list;
+                    clientList.remove(item);
+                }
+            }).start();
+        }
+    }
+
+    @Override
+    public void addToPastReservations(Reservation reservation) throws IOException {
+        fileAdapter.checkOut(reservation);
+        for (Connection item : clientList
+                ) {
+            new Thread(() -> {
+                try {
+                    item.getOutputStream().writeObject(new Response("checkout", reservation));
+                } catch (IOException e) {
+                    //Remove client from list;
+                    clientList.remove(item);
+                }
+            }).start();
+        }
+    }
+
+    public static ArrayList<Reservation> getAllInHouseGuests() {
+        return fileAdapter.getInHouseGuests();
+    }
+
+    public static ArrayList<Reservation> getPastReservations() {
+        return fileAdapter.getPast();
     }
 
     public static void main(String[] args) {
