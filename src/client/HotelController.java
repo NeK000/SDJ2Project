@@ -21,7 +21,7 @@ public class HotelController implements Serializable {
     public HotelController() {
         model = new Model();
         //"10.152.204.9"
-        client = new Client("10.152.196.98", 6789);
+        client = new Client("10.152.204.58", 6789);
     }
 //    private common.Price price;
 //    private FileAdapter fileAdapter;
@@ -95,13 +95,38 @@ public class HotelController implements Serializable {
         client.sendRequest(new Request("create reservation", reservation), model);
     }
 
+    // used for reservations.bin
     public Reservation[] getAllReservations() {
-        if(model.getAllReservations() == null) {
+        if(model.getReservations() == null) {
             Request r = new Request("get all", null);
             client.sendRequest(r, model);
         }
 
-        return model.getAllReservations();
+        return model.getReservations();
+    }
+
+    // used for inHouse.bin
+    public Reservation[] getInHouse() {
+        if(model.getInHouse() == null) {
+            Request r = new Request("inhouse", null);
+            client.sendRequest(r, model);
+        }
+
+        return model.getInHouse();
+    }
+
+    // used for pastReservations.bin
+    public Reservation[] getPastReservations() {
+        if(model.getPastReservations() == null) {
+            Request r = new Request("past", null);
+            client.sendRequest(r, model);
+        }
+
+        return model.getPastReservations();
+    }
+
+    public void checkIn(Reservation reservation) {
+        client.sendRequest(new Request("checkin", reservation), model);
     }
 
     public Reservation getReservation(Reservation r) {
@@ -111,7 +136,7 @@ public class HotelController implements Serializable {
     public void updateReservation(Reservation old_, Reservation new_) {
         Reservation[] param = new Reservation[]{old_, new_};
         Request req = new Request("update reservation", param, true);
-        client.sendRequest(req, null);
+        client.sendRequest(req, model);
     }
 
     public Model getModel() {

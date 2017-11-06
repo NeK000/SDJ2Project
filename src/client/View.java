@@ -58,7 +58,7 @@ public class View {
 
 
         Guest g = res.getGuest();
-        g.setName(new Name("Momo", "", ""));
+        g.setName(new Name("Mina", "", ""));
 
         res.setGuest(g);
 

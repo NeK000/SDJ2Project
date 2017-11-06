@@ -42,7 +42,7 @@ public class Client implements Serializable {
             new Thread(() -> {
 //
 
-                // TODO MODEL IS PASSED AS NULL
+                // TODO MODEL IS PASSED AS NULL -- solved
 
 
                 try {
@@ -58,8 +58,24 @@ public class Client implements Serializable {
                         }
 
                         if (response.getResponse().toLowerCase().equals("allreservations")) {
-                            System.out.println("recieved from server " + response);
-                            model.setAllReservations(response.getAllParameters());
+                            System.out.println("received from server " + response);
+                            model.setReservations(response.getAllParameters());
+                        }
+
+                        if(response.getResponse().toLowerCase().equals("inhouse")) {
+                            System.out.println("received from server for inhouse " + response);
+                            model.setInHouse(response.getAllParameters());
+                        }
+
+                        if(response.getResponse().toLowerCase().equals("past")) {
+                            System.out.println("received from server " + response);
+                            model.setPastReservations(response.getAllParameters());
+                        }
+
+                        if(response.getResponse().toLowerCase().equals("checkin")) {
+                            System.out.println("received from server " + response);
+                            model.checkIn(response.getParameter());
+
                         }
                     }
                 } catch (Exception e) {
