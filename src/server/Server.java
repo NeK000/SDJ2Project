@@ -90,7 +90,8 @@ public class Server implements OurObservable {
                 try {
                     item.getOutputStream().writeObject(new Response("update reservation", res));
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    //Remove client from list;
+                    clientList.remove(item);
                 }
             }).start();
         }
