@@ -1,9 +1,11 @@
 package client;
 
+import common.DateHandler;
 import common.Request;
 import common.Reservation;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * A class containing methods which later on will be used from our GUI.
@@ -18,10 +20,24 @@ public class HotelController implements Serializable {
     private Model model;
     private Client client;
 
+    public double getTotalPrice(Reservation r, String something) {
+        return 0.0;
+    }
+
+    public double getTotalPrice(Reservation r, Double something) {
+        return 0.0;
+    }
+
+
+    //toDo make this work!!
+    public String getAvailabilityFromDateInterval(DateHandler d1, DateHandler d2) {
+        return "asd";
+    }
+
     public HotelController() {
         model = new Model();
         //"10.152.204.9"
-        client = new Client("10.152.204.58", 6789);
+        client = new Client("10.152.204.110", 6789);
     }
 //    private common.Price price;
 //    private FileAdapter fileAdapter;
@@ -90,14 +106,13 @@ public class HotelController implements Serializable {
     public void createReservation(Reservation reservation) {
 
 
-
         // toDO: should call the client
         client.sendRequest(new Request("create reservation", reservation), model);
     }
 
     // used for reservations.bin
     public Reservation[] getAllReservations() {
-        if(model.getReservations() == null) {
+        if (model.getReservations() == null) {
             Request r = new Request("get all", null);
             client.sendRequest(r, model);
         }
@@ -107,7 +122,7 @@ public class HotelController implements Serializable {
 
     // used for inHouse.bin
     public Reservation[] getInHouse() {
-        if(model.getInHouse() == null) {
+        if (model.getInHouse() == null) {
             Request r = new Request("inhouse", null);
             client.sendRequest(r, model);
         }
@@ -117,7 +132,7 @@ public class HotelController implements Serializable {
 
     // used for pastReservations.bin
     public Reservation[] getPastReservations() {
-        if(model.getPastReservations() == null) {
+        if (model.getPastReservations() == null) {
             Request r = new Request("past", null);
             client.sendRequest(r, model);
         }
@@ -127,6 +142,14 @@ public class HotelController implements Serializable {
 
     public void checkIn(Reservation reservation) {
         client.sendRequest(new Request("checkin", reservation), model);
+    }
+
+    public ArrayList<Reservation> getDeparuresForToday() {
+        return model.getDeparturesForToday();
+    }
+
+    public void checkOut(Reservation r) {
+        client.sendRequest(new Request("checkout", r), model);
     }
 
     public Reservation getReservation(Reservation r) {
