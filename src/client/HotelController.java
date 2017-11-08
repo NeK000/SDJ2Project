@@ -1,9 +1,12 @@
 package client;
 
+import common.DateHandler;
 import common.Request;
 import common.Reservation;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 /**
  * A class containing methods which later on will be used from our GUI.
@@ -90,14 +93,13 @@ public class HotelController implements Serializable {
     public void createReservation(Reservation reservation) {
 
 
-
         // toDO: should call the client
         client.sendRequest(new Request("create reservation", reservation), model);
     }
 
     // used for reservations.bin
     public Reservation[] getAllReservations() {
-        if(model.getReservations() == null) {
+        if (model.getReservations() == null) {
             Request r = new Request("get all", null);
             client.sendRequest(r, model);
         }
@@ -107,7 +109,7 @@ public class HotelController implements Serializable {
 
     // used for inHouse.bin
     public Reservation[] getInHouse() {
-        if(model.getInHouse() == null) {
+        if (model.getInHouse() == null) {
             Request r = new Request("inhouse", null);
             client.sendRequest(r, model);
         }
@@ -117,7 +119,7 @@ public class HotelController implements Serializable {
 
     // used for pastReservations.bin
     public Reservation[] getPastReservations() {
-        if(model.getPastReservations() == null) {
+        if (model.getPastReservations() == null) {
             Request r = new Request("past", null);
             client.sendRequest(r, model);
         }
@@ -157,9 +159,10 @@ public class HotelController implements Serializable {
 
     /**
      * Availability method. Used to check availability between dates.
+     * <p>
+     * //     * @param arrival   takes specific date for arraving.
+     * //     * @param departure takes specific date for departure.
      *
-     * @param arrival   takes specific date for arraving.
-     * @param departure takes specific date for departure.
      * @return String, returns specific numbers of available rooms by room type.
      */
 //    public String getAvailabilityFromDateInterval(common.DateHandler arrival, common.DateHandler departure) {
@@ -246,4 +249,29 @@ public class HotelController implements Serializable {
 //                + countTwoBedroomSuite + "\nTriple Suite: " + countThreeBedroomSuite;
 //        return str;
 //    }
+    public ArrayList<Reservation> getArrivalsForToday() {
+        Reservation[] temp = model.getReservations();
+        ArrayList<Reservation> forReturn = new ArrayList<>();
+        DateHandler dateHandler = new DateHandler(1, 1, 1);
+        for (Reservation item : temp
+                ) {
+            if (item.getArrival().getCheckInDate().equals(dateHandler.currentDate())) {
+                forReturn.add(item);
+            }
+        }
+        return forReturn;
+    }
+
+    public ArrayList<Reservation> getDeparturesForToday() {
+        Reservation[] temp = model.getReservations();
+        ArrayList<Reservation> forReturn = new ArrayList<>();
+        DateHandler dateHandler = new DateHandler(1, 1, 1);
+        for (Reservation item : temp
+                ) {
+            if (item.getDeparture().getCheckOutDate().equals(dateHandler.currentDate())) {
+                forReturn.add(item);
+            }
+        }
+        return forReturn;
+    }
 }
