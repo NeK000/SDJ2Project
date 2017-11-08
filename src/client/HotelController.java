@@ -37,7 +37,7 @@ public class HotelController implements Serializable {
     public HotelController() {
         model = new Model();
         //"10.152.204.9"
-        client = new Client("10.152.204.58", 6789);
+        client = new Client("10.152.204.110", 6789);
     }
 //    private common.Price price;
 //    private FileAdapter fileAdapter;

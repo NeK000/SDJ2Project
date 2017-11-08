@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A class for creating the Create Reservation tab in the GUI.
@@ -63,7 +64,7 @@ public class CreateReservationWindowGUI {
 
         left();
 
-//        takeAllGuest();
+        takeAllGuest();
         right();
         prepareGUI();
     }
@@ -226,7 +227,7 @@ public class CreateReservationWindowGUI {
             }
             // Checks if the refresh button is pressed. If pressed will refresh the list on the right side and give you fresh list with all reservations
             else if (e.getSource() == refresh) {
-//                takeAllGuest();
+                takeAllGuest();
                 createReservationTable(new ArrayList<Reservation>());
             }
             // Checks if the choose button is pressed.
@@ -453,30 +454,36 @@ public class CreateReservationWindowGUI {
 
 
 
-    // toDo ( Yusuf ) No file adapter .. so i commented below code.
     /**
      * A method used to get all the guests in an array list.
      */
-//    public void takeAllGuest() {
-//        FileAdapter fa = new FileAdapter();
-//        ArrayList<Reservation> reservations = fa.getAllGuests("reservations.bin");
-//        ArrayList<Reservation> pastReservation = fa.getAllGuests("pastReservations.bin");
-//        ArrayList<Reservation> inHouse = fa.getAllGuests("inHouseGuests.bin");
-//        ArrayList<Reservation> temp = new ArrayList<>();
-//        allReservations = new ArrayList<>();
-//
-//        temp.addAll(reservations);
-//
-//        if (!isSearch) {
-//            temp.addAll(pastReservation);
-//            temp.addAll(inHouse);
-//        }
-//
-//        for (int i = 0; i < temp.size(); i++) {
-//            allReservations.add(temp.get(i));
-//        }
-//
-//    }
+    public void takeAllGuest() {
+        ArrayList<Reservation> reservations = new ArrayList<>();
+        reservations.addAll(Arrays.asList(hc.getAllReservations()));
+
+        ArrayList<Reservation> pastReservation = new ArrayList<>();
+        pastReservation.addAll(Arrays.asList(hc.getPastReservations()));
+
+        ArrayList<Reservation> inHouse = new ArrayList<>();
+        inHouse.addAll(Arrays.asList(hc.getInHouse()));
+
+
+
+        ArrayList<Reservation> temp = new ArrayList<>();
+        allReservations = new ArrayList<>();
+
+        temp.addAll(reservations);
+
+        if (!isSearch) {
+            temp.addAll(pastReservation);
+            temp.addAll(inHouse);
+        }
+
+        for (int i = 0; i < temp.size(); i++) {
+            allReservations.add(temp.get(i));
+        }
+
+    }
 
     /**
      * A method used to get the required data for the JTable.

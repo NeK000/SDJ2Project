@@ -105,6 +105,31 @@ public class MainGuiWindow {
     public MainGuiWindow() {
         this.hc = new HotelController();
 
+        // update The model
+
+        hc.getInHouse();
+
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        hc.getAllReservations();
+
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        hc.getPastReservations();
+
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         checkAvailability = new CheckAvailability(hc);
         createReservationWindowGUI = new CreateReservationWindowGUI(tabPane, hc);
         search = new Search(tabPane, hc);
