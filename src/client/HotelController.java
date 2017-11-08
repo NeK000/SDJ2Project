@@ -1,6 +1,7 @@
 package client;
 
 import common.DateHandler;
+import common.Price;
 import common.Request;
 import common.Reservation;
 
@@ -8,6 +9,8 @@ import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * A class containing methods which later on will be used from our GUI.
@@ -19,6 +22,7 @@ import java.util.Arrays;
 
 public class HotelController implements Serializable {
 
+    private Price price;
     private Model model;
     private Client client;
 
@@ -69,22 +73,22 @@ public class HotelController implements Serializable {
 //     * @param discount    takes discount so calculates the price upon check out.
 //     * @return price common.Price with the discount.
 //     */
-//    public String getTotalPrice(common.Reservation reservation, double discount) {
-//
-//        Calendar cal = new GregorianCalendar(reservation.getArrival().getCheckInDate().getYear(),
-//                reservation.getArrival().getCheckInDate().getMonth() - 1,
-//                reservation.getArrival().getCheckInDate().getDay());
-//        Calendar cal2 = new GregorianCalendar(reservation.getDeparture().getCheckOutDate().getYear(),
-//                reservation.getDeparture().getCheckOutDate().getMonth() - 1,
-//                reservation.getDeparture().getCheckOutDate().getDay());
-//        int total = cal2.get(Calendar.DAY_OF_YEAR) - cal.get(Calendar.DAY_OF_YEAR);
-//        double totalPrice = price.getRoomPrice(reservation.getRoomType()) * total;
-//        if (discount == 0) {
-//            return String.valueOf(totalPrice);
-//        }
-//        double finalPrice = Math.round((discount * totalPrice) / 100);
-//        return String.valueOf(totalPrice - finalPrice);
-//    }
+    public String getTotalPrice(common.Reservation reservation, double discount) {
+
+        Calendar cal = new GregorianCalendar(reservation.getArrival().getCheckInDate().getYear(),
+                reservation.getArrival().getCheckInDate().getMonth() - 1,
+                reservation.getArrival().getCheckInDate().getDay());
+        Calendar cal2 = new GregorianCalendar(reservation.getDeparture().getCheckOutDate().getYear(),
+                reservation.getDeparture().getCheckOutDate().getMonth() - 1,
+                reservation.getDeparture().getCheckOutDate().getDay());
+        int total = cal2.get(Calendar.DAY_OF_YEAR) - cal.get(Calendar.DAY_OF_YEAR);
+        double totalPrice = price.getRoomPrice(reservation.getRoomType()) * total;
+        if (discount == 0) {
+            return String.valueOf(totalPrice);
+        }
+        double finalPrice = Math.round((discount * totalPrice) / 100);
+        return String.valueOf(totalPrice - finalPrice);
+    }
 
     /**
      * Create reservation method. Used to create reservation and save it in the system.
