@@ -77,6 +77,12 @@ public class Client implements Serializable {
                             model.checkIn(response.getParameter());
 
                         }
+
+                        if(response.getResponse().toLowerCase().equals("checkout")) {
+                            System.out.println("received from server " + response);
+                            model.checkOut(response.getParameter());
+
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

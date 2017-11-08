@@ -1,5 +1,7 @@
 package client;
 
+import common.DateHandler;
+
 import javax.swing.*;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.SimpleAttributeSet;
@@ -58,9 +60,9 @@ public class CheckAvailability {
      */
     private void prepareSearchWindow() {
 
-        // toDo ( Yusuf ) I commented below code. Don't ask why.
-//        roomData = new JTextArea(hm.getAvailabilityFromDateInterval(new DateHandler(1, 1, 2200),
-//                new DateHandler(1, 2, 2200)));
+
+        roomData = new JTextArea(hc.getAvailabilityFromDateInterval(new DateHandler(1, 1, 2200),
+                new DateHandler(1, 2, 2200)));
         JScrollPane listScroller = new JScrollPane(roomData);
         listScroller.setPreferredSize(new Dimension(700, 400));
         roomData.setEditable(false);

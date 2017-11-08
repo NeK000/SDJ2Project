@@ -140,7 +140,7 @@ public class CheckOutGUI {
         departure.setText(String.valueOf(reservation.getDeparture().getCheckOutDate()));
         roomType.setText(String.valueOf(reservation.getRoomType()));
         roomNumber.setText(String.valueOf(reservation.getRoomNumber()));
-        price.setText(String.valueOf(hc.getTotalPrice(reservation, 0)));
+        price.setText(String.valueOf(hc.getTotalPrice(reservation, (double) 0)));
 
     }
 
@@ -182,10 +182,12 @@ public class CheckOutGUI {
          */
         public void keyReleased(KeyEvent e) {
 
+            // toDo: this was changed, check the original, it was just a quick workaround
+
             if (isValidNumber(discountField.getText())) {
                 double discount = Double.parseDouble(discountField.getText());
                 if (discount >= 0 && discount <= 100) {
-                    price.setText(hc.getTotalPrice(reservation, Double.parseDouble(discountField.getText())));
+                    price.setText(String.valueOf(hc.getTotalPrice(reservation, Double.parseDouble(discountField.getText()))));
                     warnings.setText("");
                 } else {
                     warnings.setText("<html><font color='red'>Discount should be between 0 and 100</font></html>");
@@ -194,7 +196,7 @@ public class CheckOutGUI {
             }
             if (!isValidNumber(discountField.getText()) ||
                     discountField.getText().isEmpty()) {
-                price.setText(hc.getTotalPrice(reservation, 0));
+                price.setText(String.valueOf(hc.getTotalPrice(reservation, (double) 0)));
             }
             if(!isValidNumber(discountField.getText())) {
                 warnings.setText("<html><font color='red'>Discount should be between 0 and 100</font></html>");

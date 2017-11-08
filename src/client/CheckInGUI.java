@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A class containing the GUI for check in.
@@ -186,82 +187,83 @@ public class CheckInGUI {
      * @param res the specific reservation
      */
 
-//    public void setRoomNumber(Reservation res) {
-//
-//
-//        ArrayList<Reservation> inHouse = new FileAdapter().getAllGuests("inHouseGuests.bin");
-//        singleRooms = generateRoomNumber(101, 110);
-//        twinRoom = generateRoomNumber(111, 116);
-//        kingSize = generateRoomNumber(117, 119);
-//        kingSize2 = generateRoomNumber(201, 219);
-//        for (int i = 0; i < kingSize2.size(); i++) {
-//            kingSize.add(kingSize2.get(i));
-//        }
-//        singleSuite = generateRoomNumber(303, 304);
-//        doubleSuite = new ArrayList<Integer>();
-//        doubleSuite.add(302);
-//        tripleSuite = new ArrayList<Integer>();
-//        tripleSuite.add(301);
-//
-//
-//        for (int i = 0; i < inHouse.size(); i++) {
-//            if (singleRooms.contains(inHouse.get(i).getRoomNumber())) {
-//                singleRooms.remove(singleRooms.indexOf(inHouse.get(i).getRoomNumber()));
-//            }
-//            if (twinRoom.contains(inHouse.get(i).getRoomNumber())) {
-//                twinRoom.remove(twinRoom.indexOf(inHouse.get(i).getRoomNumber()));
-//            }
-//            if (kingSize.contains(inHouse.get(i).getRoomNumber())) {
-//                kingSize.remove(kingSize.indexOf(inHouse.get(i).getRoomNumber()));
-//            }
-//            if (singleSuite.contains(inHouse.get(i).getRoomNumber())) {
-//                singleSuite.remove(singleSuite.indexOf(inHouse.get(i).getRoomNumber()));
-//            }
-//            if (doubleSuite.contains(inHouse.get(i).getRoomNumber())) {
-//                doubleSuite.remove(doubleSuite.indexOf(inHouse.get(i).getRoomNumber()));
-//            }
-//            if (tripleSuite.contains(inHouse.get(i).getRoomNumber())) {
-//                tripleSuite.remove(tripleSuite.indexOf(inHouse.get(i).getRoomNumber()));
-//            }
-//        }
-//        roomNumberField.revalidate();
-//
-//
-//        if (res.getRoomType().equals("single room")) {
-//
-//            for (int i = 0; i < singleRooms.size(); i++) {
-//
-//                roomNumberField.addItem(singleRooms.get(i));
-//            }
-//        }
-//        if (res.getRoomType().equals("double room-twin beds")) {
-//
-//            for (int i = 0; i < twinRoom.size(); i++) {
-//                roomNumberField.addItem(twinRoom.get(i));
-//            }
-//        }
-//        if (res.getRoomType().equals("double room-kingsize")) {
-//            for (int i = 0; i < kingSize.size(); i++) {
-//                roomNumberField.addItem(kingSize.get(i));
-//            }
-//        }
-//        if (res.getRoomType().equals("single bedroom suite")) {
-//            for (int i = 0; i < singleSuite.size(); i++) {
-//                roomNumberField.addItem(singleSuite.get(i));
-//            }
-//        }
-//        if (res.getRoomType().equals("three bedroom suite")) {
-//            for (int i = 0; i < tripleSuite.size(); i++) {
-//                roomNumberField.addItem(tripleSuite.get(i));
-//            }
-//        }
-//        if (res.getRoomType().equals("two bedroom suite")) {
-//            for (int i = 0; i < doubleSuite.size(); i++) {
-//                roomNumberField.addItem(doubleSuite.get(i));
-//            }
-//        }
-//
-//    }
+    public void setRoomNumber(Reservation res, Reservation[] h) {
+
+        ArrayList<Reservation> inHouse = new ArrayList<>();
+        inHouse.addAll(Arrays.asList(h));
+
+        singleRooms = generateRoomNumber(101, 110);
+        twinRoom = generateRoomNumber(111, 116);
+        kingSize = generateRoomNumber(117, 119);
+        kingSize2 = generateRoomNumber(201, 219);
+        for (int i = 0; i < kingSize2.size(); i++) {
+            kingSize.add(kingSize2.get(i));
+        }
+        singleSuite = generateRoomNumber(303, 304);
+        doubleSuite = new ArrayList<Integer>();
+        doubleSuite.add(302);
+        tripleSuite = new ArrayList<Integer>();
+        tripleSuite.add(301);
+
+
+        for (int i = 0; i < inHouse.size(); i++) {
+            if (singleRooms.contains(inHouse.get(i).getRoomNumber())) {
+                singleRooms.remove(singleRooms.indexOf(inHouse.get(i).getRoomNumber()));
+            }
+            if (twinRoom.contains(inHouse.get(i).getRoomNumber())) {
+                twinRoom.remove(twinRoom.indexOf(inHouse.get(i).getRoomNumber()));
+            }
+            if (kingSize.contains(inHouse.get(i).getRoomNumber())) {
+                kingSize.remove(kingSize.indexOf(inHouse.get(i).getRoomNumber()));
+            }
+            if (singleSuite.contains(inHouse.get(i).getRoomNumber())) {
+                singleSuite.remove(singleSuite.indexOf(inHouse.get(i).getRoomNumber()));
+            }
+            if (doubleSuite.contains(inHouse.get(i).getRoomNumber())) {
+                doubleSuite.remove(doubleSuite.indexOf(inHouse.get(i).getRoomNumber()));
+            }
+            if (tripleSuite.contains(inHouse.get(i).getRoomNumber())) {
+                tripleSuite.remove(tripleSuite.indexOf(inHouse.get(i).getRoomNumber()));
+            }
+        }
+        roomNumberField.revalidate();
+
+
+        if (res.getRoomType().equals("single room")) {
+
+            for (int i = 0; i < singleRooms.size(); i++) {
+
+                roomNumberField.addItem(singleRooms.get(i));
+            }
+        }
+        if (res.getRoomType().equals("double room-twin beds")) {
+
+            for (int i = 0; i < twinRoom.size(); i++) {
+                roomNumberField.addItem(twinRoom.get(i));
+            }
+        }
+        if (res.getRoomType().equals("double room-kingsize")) {
+            for (int i = 0; i < kingSize.size(); i++) {
+                roomNumberField.addItem(kingSize.get(i));
+            }
+        }
+        if (res.getRoomType().equals("single bedroom suite")) {
+            for (int i = 0; i < singleSuite.size(); i++) {
+                roomNumberField.addItem(singleSuite.get(i));
+            }
+        }
+        if (res.getRoomType().equals("three bedroom suite")) {
+            for (int i = 0; i < tripleSuite.size(); i++) {
+                roomNumberField.addItem(tripleSuite.get(i));
+            }
+        }
+        if (res.getRoomType().equals("two bedroom suite")) {
+            for (int i = 0; i < doubleSuite.size(); i++) {
+                roomNumberField.addItem(doubleSuite.get(i));
+            }
+        }
+
+    }
 
     /**
      * A method that returns the leftPanel of this class as a JPanel.

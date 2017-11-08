@@ -9,8 +9,8 @@ import javax.swing.*;
  */
 public class Search extends CreateReservationWindowGUI {
 
-    public Search (JTabbedPane parent) {
-        super(parent);
+    public Search (JTabbedPane parent, HotelController hc) {
+        super(parent, hc);
     }
 
 }

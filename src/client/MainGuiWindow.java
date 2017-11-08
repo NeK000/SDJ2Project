@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * This class holds the JFrame (the window)  of the GUI and also the JTabbedPane.
@@ -66,31 +67,48 @@ public class MainGuiWindow {
     private JButton rightButton;
     private JButton leftButton;
 
-    // toDo ( Yusuf ) I commented below code. Don't ask why.
     // The Searches
-//    private arrSearch arrPresser;
-//    private depSearch depPresser;
+    private arrSearch arrPresser;
+    private depSearch depPresser;
 
     private ArrayList<Reservation> arrivals = new ArrayList<>();
     private ArrayList<Reservation> departures = new ArrayList<>();
 
     private MyButtonListener listener = new MyButtonListener();
 
-    private CreateReservationWindowGUI createReservationWindowGUI = new CreateReservationWindowGUI(tabPane, hc);
-    private Search search = new Search(tabPane);
-    private CheckAvailability checkAvailability = new CheckAvailability(hc);
+    private CreateReservationWindowGUI createReservationWindowGUI;
+    private Search search;
+    private CheckAvailability checkAvailability;
     private CheckOutGUI checkOutGUI = new CheckOutGUI(tabPane, hc);
     private CheckInGUI checkInGUI = new CheckInGUI(tabPane, hc);
 
     private Object[][] arrCol;
     private Object[][] depCol;
+    /**
+     * This method will call the refresh method each time the "Home" tab is pressed.
+     *
+     * @see #refresh()
+     */
+    ChangeListener changeListener = new ChangeListener() {
+        public void stateChanged(ChangeEvent changeEvent) {
+            JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
+            if (sourceTabbedPane.getSelectedIndex() == 0) {
+                refresh();
+            }
+        }
+    };
 
     /**
      * No-argument constructor used for initialising window params, adding tabs to the tab pane,
      * disabling the check-in and check-out tabs and loading all data from the bin files.
      */
-    public MainGuiWindow(HotelController hc) {
-        this.hc = hc;
+    public MainGuiWindow() {
+        this.hc = new HotelController();
+
+        checkAvailability = new CheckAvailability(hc);
+        createReservationWindowGUI = new CreateReservationWindowGUI(tabPane, hc);
+        search = new Search(tabPane, hc);
+
         mainWindow();
 
 
@@ -144,10 +162,9 @@ public class MainGuiWindow {
 
 //        adapter = new FileAdapter();
 
-        // toDo ( Yusuf ) I commented below code. Don't ask why.
         //Declare
-//        arrPresser = new arrSearch();
-//        depPresser = new depSearch();
+        arrPresser = new arrSearch();
+        depPresser = new depSearch();
 
         mainWindow.setSize(1440, 960);
         mainWindow.setLocation(300, 20);
@@ -213,8 +230,7 @@ public class MainGuiWindow {
         rightSearchLabel.setPreferredSize(new Dimension(113, 50));
 
         leftSearch = new JTextField(10);
-        // toDo ( Yusuf ) I commented below code. Don't ask why.
-//        leftSearch.addKeyListener(arrPresser);
+        leftSearch.addKeyListener(arrPresser);
         searchPanelLeft = new JPanel();
         searchPanelLeft.setPreferredSize(new Dimension(500, 50));
         searchPanelLeft.add(leftSearchLabel, BorderLayout.WEST);
@@ -222,8 +238,7 @@ public class MainGuiWindow {
         left.add(searchPanelLeft, BorderLayout.NORTH);
         //Right
         rightSearch = new JTextField(10);
-        // toDo ( Yusuf ) I commented below code. Don't ask why.
-//        rightSearch.addKeyListener(depPresser);
+        rightSearch.addKeyListener(depPresser);
         searchPanelRight = new JPanel();
         searchPanelRight.setPreferredSize(new Dimension(500, 50));
 
@@ -298,14 +313,14 @@ public class MainGuiWindow {
         });
     }
 
-
     /**
      * Iterates an arrayList of reservations and checks if the arrival date of any reservation
      * matches the current date. It sets the table data in the Arrival panel of the "Home" tab
      * to be equal to all the found reservations that do.
+     *
+     * @param arrivals an ArrayList of Reservation objects
      */
-    public void getAllArrivalsForToday() {
-        ArrayList<Reservation> arrivals = hc.getArrivalsForToday();
+    public void getAllArrivalsForToday(ArrayList<Reservation> arrivals) {
         arrCol = new Object[arrivals.size()][5];
 
         for (int i = 0; i < arrivals.size(); i++) {
@@ -323,6 +338,31 @@ public class MainGuiWindow {
         allArrivalsTable.setModel(dtm);
     }
 
+    /**
+     * Iterates an arrayList of reservations and checks if the arrival date of any reservation
+     * matches the current date. It sets the table data in the Arrival panel of the "Home" tab
+     * to be equal to all the found reservations that do.
+     */
+    public void getAllArrivalsForToday() {
+        Reservation[] res = hc.getInHouse();
+        ArrayList<Reservation> arrivals = new ArrayList<>();
+        arrivals.addAll(Arrays.asList(res));
+        arrCol = new Object[arrivals.size()][5];
+
+        for (int i = 0; i < arrivals.size(); i++) {
+            DateHandler d = new DateHandler(1, 1, 1);
+            if (arrivals.get(i).getArrival().getCheckInDate().equals(d.currentDate())) {
+                arrCol[i][0] = arrivals.get(i).getGuest().getName().getFirstName();
+                arrCol[i][1] = arrivals.get(i).getGuest().getName().getMiddleName();
+                arrCol[i][2] = arrivals.get(i).getGuest().getName().getLastName();
+                arrCol[i][3] = arrivals.get(i).getGuest().getAddress().getCountry();
+                arrCol[i][4] = arrivals.get(i).getGuest().getPhoneNumber();
+            }
+
+        }
+        dtm = new DefaultTableModel(arrCol, titles);
+        allArrivalsTable.setModel(dtm);
+    }
 
     /**
      * Iterates an arrayList of reservations and checks if the departure date of any reservation
@@ -330,7 +370,7 @@ public class MainGuiWindow {
      * to be equal to all the found reservations that do.
      */
     public void getAllDeparturesForToday() {
-        ArrayList<Reservation> departures = hc.getDeparturesForToday();
+        ArrayList<Reservation> departures = hc.getDeparuresForToday();
         depCol = new Object[departures.size()][5];
 
         for (int i = 0; i < departures.size(); i++) {
@@ -346,43 +386,70 @@ public class MainGuiWindow {
         allDeparturesTable.setModel(dtm);
     }
 
+    /**
+     * Iterates an arrayList of reservations and checks if the departure date of any reservation
+     * matches the current date. It sets the table data in the Departure panel of the "Home" tab
+     * to be equal to all the found reservations that do.
+     *
+     * @param departures an ArrayList of Reservation objects
+     */
+    public void getAllDeparturesForToday(ArrayList<Reservation> departures) {
+        depCol = new Object[departures.size()][5];
 
-//    /**
-//     * Gets all the reservations from the reservations file and fills the arrivals ArrayList with any reservation
-//     * that has the Arrival date equals to today's date
-//     */
-//    public void getArrivalsForToday() {
+        for (int i = 0; i < departures.size(); i++) {
+            DateHandler d = new DateHandler(1, 1, 1);
+            if (departures.get(i).getDeparture().getCheckOutDate().equals(d.currentDate())) {
+                depCol[i][0] = departures.get(i).getGuest().getName().getFirstName();
+                depCol[i][1] = departures.get(i).getGuest().getName().getMiddleName();
+                depCol[i][2] = departures.get(i).getGuest().getName().getLastName();
+                depCol[i][3] = departures.get(i).getGuest().getAddress().getCountry();
+                depCol[i][4] = departures.get(i).getGuest().getPhoneNumber();
+            }
+        }
+        dtm = new DefaultTableModel(depCol, titles);
+        allDeparturesTable.setModel(dtm);
+    }
+
+    /**
+     * Gets all the reservations from the reservations file and fills the arrivals ArrayList with any reservation
+     * that has the Arrival date equals to today's date
+     */
+    public void getArrivalsForToday() {
+        ArrayList<Reservation> reservations = new ArrayList<>();
+        reservations.addAll(Arrays.asList(hc.getAllReservations()));
 //        ArrayList<Reservation> reservations = adapter.getAllGuests("reservations.bin");
-//        DateHandler d = new DateHandler(1, 1, 1);
-//        for (int i = 0; i < reservations.size(); i++) {
-//            if (reservations.get(i).getArrival().getCheckInDate().equals(d.currentDate())) {
-//                arrivals.add(reservations.get(i));
-//            }
-//        }
-//
-//    }
-//
-//    /**
-//     * Gets all the reservations from the reservations file and fills the departures ArrayList with any reservation
-//     * that has the Departure date equals to today's date
-//     */
-//    public void getDeparturesForToday() {
+        DateHandler d = new DateHandler(1, 1, 1);
+        for (int i = 0; i < reservations.size(); i++) {
+            if (reservations.get(i).getArrival().getCheckInDate().equals(d.currentDate())) {
+                arrivals.add(reservations.get(i));
+            }
+        }
+
+    }
+
+    /**
+     * Gets all the reservations from the reservations file and fills the departures ArrayList with any reservation
+     * that has the Departure date equals to today's date
+     */
+    public void getDeparturesForToday() {
+        ArrayList<Reservation> inHouse = new ArrayList<>();
+        inHouse.addAll(Arrays.asList(hc.getInHouse()));
 //        ArrayList<Reservation> inHouse = adapter.getAllGuests("inHouseGuests.bin");
-//        DateHandler d = new DateHandler(1, 1, 1);
-//        for (int i = 0; i < inHouse.size(); i++) {
-//            if (inHouse.get(i).getDeparture().getCheckOutDate().equals(d.currentDate())) {
-//                departures.add(inHouse.get(i));
-//            }
-//        }
-//    }
+        DateHandler d = new DateHandler(1, 1, 1);
+        for (int i = 0; i < inHouse.size(); i++) {
+            if (inHouse.get(i).getDeparture().getCheckOutDate().equals(d.currentDate())) {
+                departures.add(inHouse.get(i));
+            }
+        }
+    }
 
     /**
      * Reads the inHouseGuest file and each Reservation in that file
      * is added as data to the allInHouseGuests table.
      */
     public void getAllInHouseGuests() {
-        // toDo ( Yusuf ) I commented below code. Don't ask why.
-//        inHouseGuestsArray = adapter.getAllGuests("inHouseGuests.bin");
+        Reservation[] all = hc.getAllReservations();
+        inHouseGuestsArray.addAll(Arrays.asList(all));
         Object[][] dataIHG = new Object[inHouseGuestsArray.size()][8];
         for (int i = 0; i < inHouseGuestsArray.size(); i++) {
             dataIHG[i][0] = inHouseGuestsArray.get(i).getGuest().getName().getFirstName();
@@ -412,9 +479,7 @@ public class MainGuiWindow {
             if (e.getSource() == leftButton) {
                 if (allArrivalsTable.getSelectedRow() >= 0) {
                     checkInGUI.getDataForCheckIn(arrivals.get(allArrivalsTable.getSelectedRow()));
-
-                    // toDo ( Yusuf ) I commented below code. Don't ask why.
-//                    checkInGUI.setRoomNumber(arrivals.get(allArrivalsTable.getSelectedRow()));
+                    checkInGUI.setRoomNumber(arrivals.get(allArrivalsTable.getSelectedRow()), hc.getInHouse());
                     tabPane.setSelectedIndex(5);
                     refresh();
                 }
@@ -432,85 +497,68 @@ public class MainGuiWindow {
         }
     }
 
-    /**
-     * This method will call the refresh method each time the "Home" tab is pressed.
-     *
-     * @see #refresh()
-     */
-    ChangeListener changeListener = new ChangeListener() {
-        public void stateChanged(ChangeEvent changeEvent) {
-            JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
-            if (sourceTabbedPane.getSelectedIndex() == 0) {
-                refresh();
-            }
+    // Event listeners for search
+    //Arrivals Search
+    class arrSearch implements KeyListener {
+        public void keyTyped(KeyEvent e) {
         }
-    };
 
-    // toDo Methods constructor changed ... for filtering . CHECK!
-//    // Event listeners for search
-//    //Arrivals Search
-//    class arrSearch implements KeyListener {
-//        public void keyTyped(KeyEvent e) {
-//        }
-//
-//
-//        public void keyPressed(KeyEvent e) {
-//
-//        }
-//
-//
-//        /**
-//         * Filters the Arrival table based on the user input
-//         *
-//         * @param e key event
-//         */
-//        public void keyReleased(KeyEvent e) {
-//            ArrayList<Reservation> foundNames = new ArrayList<>();
-//            getAllArrivalsForToday();
-//
-//            for (int i = 0; i < arrCol.length; i++) {
-//                String fullName = String.valueOf(arrCol[i][0].toString().toLowerCase());
-//                if (fullName.contains(leftSearch.getText().toLowerCase())) {
-//                    foundNames.add(arrivals.get(i));
-//                }
-//            }
-////            getAllArrivalsForToday(foundNames);
-//            getAllArrivalsForToday();
-//
-//        }
-//    }
 
-    // toDo Methods constructor changed ... for filtering . CHECK!
+        public void keyPressed(KeyEvent e) {
+
+        }
+
+        /**
+         * Filters the Arrival table based on the user input
+         *
+         * @param e key event
+         */
+        public void keyReleased(KeyEvent e) {
+            ArrayList<Reservation> foundNames = new ArrayList<>();
+            getAllArrivalsForToday(arrivals);
+
+            for (int i = 0; i < arrCol.length; i++) {
+                String fullName = String.valueOf(arrCol[i][0].toString().toLowerCase());
+                if (fullName.contains(leftSearch.getText().toLowerCase())) {
+                    foundNames.add(arrivals.get(i));
+                }
+            }
+            getAllArrivalsForToday(foundNames);
+
+
+        }
+    }
+
     //Departures Search
-//    class depSearch implements KeyListener {
-//        public void keyTyped(KeyEvent e) {
-//        }
-//
-//
-//        public void keyPressed(KeyEvent e) {
-//
-//        }
-//
-//        /**
-//         * Filters the Departure table based on the user input
-//         *
-//         * @param e key event
-//         */
-//        public void keyReleased(KeyEvent e) {
-//            ArrayList<Reservation> foundNames = new ArrayList<>();
-//            getAllDeparturesForToday();
-//
-//            for (int i = 0; i < depCol.length; i++) {
-//                String fullName = String.valueOf(depCol[i][0].toString().toLowerCase());
-//                if (fullName.contains(rightSearch.getText().toLowerCase())) {
-//                    foundNames.add(departures.get(i));
-//                }
-//            }
-//            getAllDeparturesForToday(foundNames);
-//
-//
-//        }
-//    }
+    class depSearch implements KeyListener {
+        public void keyTyped(KeyEvent e) {
+        }
+
+
+        public void keyPressed(KeyEvent e) {
+
+        }
+
+        /**
+         * Filters the Departure table based on the user input
+         *
+         * @param e key event
+         */
+        public void keyReleased(KeyEvent e) {
+            ArrayList<Reservation> foundNames = new ArrayList<>();
+            getAllDeparturesForToday();
+
+            for (int i = 0; i < depCol.length; i++) {
+                String fullName = String.valueOf(depCol[i][0].toString().toLowerCase());
+                if (fullName.contains(rightSearch.getText().toLowerCase())) {
+                    foundNames.add(departures.get(i));
+                }
+            }
+            getAllDeparturesForToday(foundNames);
+
+
+        }
+    }
 
 
 }
