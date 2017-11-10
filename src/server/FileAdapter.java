@@ -282,8 +282,22 @@ public class FileAdapter implements Serializable {
     }
 
     public void updateReservation(Reservation old, Reservation newOne) {
-        removeSingleObjectFromFile("reservations.bin", old);
-        writeToFileObj("reservations.bin", newOne);
+        Reservation[] temp = (Reservation[]) readFromFileObj("reservations.bin");
+        for (int i = 0; i < temp.length; i++) {
+            if (temp[i].equals(old)) {
+                removeSingleObjectFromFile("reservations.bin", old);
+                writeToFileObj("reservations.bin", newOne);
+                break;
+            }
+        }
+        temp = (Reservation[]) readFromFileObj("inHouseGuests.bin");
+        for (int i = 0; i < temp.length; i++) {
+            if (temp[i].equals(old)) {
+                removeSingleObjectFromFile("inHouseGuests.bin", old);
+                writeToFileObj("inHouseGuests.bin", newOne);
+                break;
+            }
+        }
     }
 
     public void checkIn(Reservation old) {
