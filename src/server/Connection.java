@@ -51,12 +51,8 @@ public class Connection implements Runnable, OurObserver {
 //                }
 //            }
             if (newRequest.getType().equalsIgnoreCase("create reservation")) {
-                try {
-                    Server.createReservation(newRequest.getParameter());
-                    updateOne(newRequest.getParameter());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                server.createReservation(newRequest.getParameter());
+
             }
             if (newRequest.getType().equalsIgnoreCase("get all")) {
                 try {
@@ -121,10 +117,7 @@ public class Connection implements Runnable, OurObserver {
         server.updateAll(old, newOne);
     }
 
-    @Override
-    public void updateOne(Reservation reservation) throws IOException {
-        server.updateAll(reservation);
-    }
+
 
     @Override
     public void updateOnInHouse(Reservation reservation) throws IOException {
@@ -138,5 +131,10 @@ public class Connection implements Runnable, OurObserver {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void update(Response asd) {
+        writeObject(asd);
     }
 }
