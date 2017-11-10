@@ -6,6 +6,7 @@ import common.Reservation;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A class containing methods which later on will be used from our GUI.
@@ -20,6 +21,12 @@ public class HotelController implements Serializable {
     private Model model;
     private Client client;
 
+    public HotelController() {
+        model = new Model();
+        //"10.152.204.9"
+        client = new Client("10.152.204.110", 6789);
+    }
+
     public double getTotalPrice(Reservation r, String something) {
         return 0.0;
     }
@@ -28,17 +35,6 @@ public class HotelController implements Serializable {
         return 0.0;
     }
 
-
-    //toDo make this work!!
-    public String getAvailabilityFromDateInterval(DateHandler d1, DateHandler d2) {
-        return "asd";
-    }
-
-    public HotelController() {
-        model = new Model();
-        //"10.152.204.9"
-        client = new Client("10.152.204.110", 6789);
-    }
 //    private common.Price price;
 //    private FileAdapter fileAdapter;
 //
@@ -104,9 +100,6 @@ public class HotelController implements Serializable {
      * @param reservation takes specific reservation.
      */
     public void createReservation(Reservation reservation) {
-
-
-        // toDO: should call the client
         client.sendRequest(new Request("create reservation", reservation), model);
     }
 
@@ -144,10 +137,6 @@ public class HotelController implements Serializable {
         client.sendRequest(new Request("checkin", reservation), model);
     }
 
-    public ArrayList<Reservation> getDeparuresForToday() {
-        return model.getDeparturesForToday();
-    }
-
     public void checkOut(Reservation r) {
         client.sendRequest(new Request("checkout", r), model);
     }
@@ -176,6 +165,120 @@ public class HotelController implements Serializable {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+
+    public String getAvailabilityFromDateInterval(DateHandler arrival, DateHandler departure) {
+        int countSingleBedroomSuite = 0;
+        int countTwoBedroomSuite = 0;
+        int countThreeBedroomSuite = 0;
+        int singleRoom = 0;
+        int twinRoom = 0;
+        int kingSizeRoom = 0;
+
+        ArrayList<Reservation> temp = new ArrayList<>();
+        ArrayList<Reservation> compare = new ArrayList<>();
+        Reservation[] compareFutureReservations = model.getReservations();
+        Reservation[] compareInHouseReservations = model.getInHouse();
+        compare.addAll(Arrays.asList(compareFutureReservations));
+        compare.addAll(Arrays.asList(compareInHouseReservations));
+
+        for (int i = 0; i < compare.size(); i++) {
+            if (!(compare.get(i).getDeparture().getCheckOutDate().isBefore(arrival))
+                    && (compare.get(i).getArrival().getCheckInDate().isBefore(departure))) {
+                temp.add(compare.get(i));
+            }
+        }
+
+        for (int i = 0; i < temp.size(); i++) {
+            if (temp.get(i).getRoomType().equals("single bedroom suite")) {
+                countSingleBedroomSuite++;
+            }
+            if (temp.get(i).getRoomType().equals("double bedroom suite")) {
+                countTwoBedroomSuite++;
+            }
+            if (temp.get(i).getRoomType().equals("three bedroom suite")) {
+                countThreeBedroomSuite++;
+            }
+            if (temp.get(i).getRoomType().equals("single room")) {
+                singleRoom++;
+            }
+            if (temp.get(i).getRoomType().equals("double room-twin beds")) {
+                twinRoom++;
+            }
+            if (temp.get(i).getRoomType().equals("double room-kingsize")) {
+                kingSizeRoom++;
+            }
+        }
+
+        if (countSingleBedroomSuite <= 2) {
+            countSingleBedroomSuite = 2 - countSingleBedroomSuite;
+        } else {
+            countSingleBedroomSuite = 0;
+        }
+
+        if (countTwoBedroomSuite <= 1) {
+            countTwoBedroomSuite = 1 - countTwoBedroomSuite;
+        } else {
+            countTwoBedroomSuite = 0;
+        }
+
+
+        if (countThreeBedroomSuite <= 1) {
+            countThreeBedroomSuite = 1 - countThreeBedroomSuite;
+        } else {
+            countThreeBedroomSuite = 0;
+        }
+
+        if (singleRoom <= 10) {
+            singleRoom = 10 - singleRoom;
+        } else {
+            singleRoom = 0;
+        }
+
+        if (twinRoom <= 6) {
+            twinRoom = 6 - twinRoom;
+        } else {
+            twinRoom = 0;
+        }
+
+        if (kingSizeRoom <= 22) {
+            kingSizeRoom = 22 - kingSizeRoom;
+        } else {
+            kingSizeRoom = 0;
+        }
+
+        String str = "Single room: " + singleRoom +
+                "\nDouble room-twin bed: " + twinRoom + "\nDouble room-kingsize bed: "
+                + kingSizeRoom + "\nSingle suite: " + countSingleBedroomSuite + "\nDouble suite: "
+                + countTwoBedroomSuite + "\nTriple Suite: " + countThreeBedroomSuite;
+        return str;
+    }
+
+    public ArrayList<Reservation> getArrivalsForToday() {
+        Reservation[] temp = model.getReservations();
+        ArrayList<Reservation> forReturn = new ArrayList<>();
+        DateHandler dateHandler = new DateHandler(1, 1, 1);
+        for (Reservation item : temp
+                ) {
+            if (item.getArrival().getCheckInDate().equals(dateHandler.currentDate())) {
+                forReturn.add(item);
+            }
+        }
+        return forReturn;
+    }
+
+    public ArrayList<Reservation> getDeparturesForToday() {
+        Reservation[] temp = model.getInHouse();
+        ArrayList<Reservation> forReturn = new ArrayList<>();
+        DateHandler dateHandler = new DateHandler(1, 1, 1);
+        for (Reservation item : temp
+                ) {
+            if (item.getDeparture().getCheckOutDate().equals(dateHandler.currentDate())) {
+                forReturn.add(item);
+            }
+        }
+        return forReturn;
     }
 
     /**

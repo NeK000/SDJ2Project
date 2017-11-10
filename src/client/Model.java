@@ -23,15 +23,36 @@ public class Model {
         return null;
     }
 
-    public void updateReservation(Reservation[] reservations) {
-        Reservation old_ = reservations[0];
-        Reservation new_ = reservations[1];
-
-        for (int i = 0; i < this.reservations.length; i++) {
-            if (this.reservations[i].equals(old_)) {
-                this.reservations[i] = new_;
+    private void replace(Reservation[] arr, Reservation old_, Reservation new_) {
+        for(int i = 0; i < arr.length; i++) {
+            if(arr[i].equals(old_)) {
+                arr[i] = new_;
+                break;
             }
         }
+    }
+
+    public void updateReservation(Reservation[] reservations_) {
+        Reservation old_ = reservations_[0];
+        Reservation new_ = reservations_[1];
+
+        if(indexOf(reservations, old_) >= 0) {
+            replace(reservations, old_, new_);
+        }
+
+        if(indexOf(inHouse, old_) >= 0) {
+            replace(reservations, old_, new_);
+        }
+
+        if(indexOf(pastReservations, old_) >= 0) {
+            replace(reservations, old_, new_);
+        }
+
+//        for (int i = 0; i < this.reservations.length; i++) {
+//            if (this.reservations[i].equals(old_)) {
+//                this.reservations[i] = new_;
+//            }
+//        }
     }
 
 //    public void checkIn(Reservation reservation) {

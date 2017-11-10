@@ -4,7 +4,6 @@ import common.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -89,12 +88,10 @@ public class MainGuiWindow {
      *
      * @see #refresh()
      */
-    ChangeListener changeListener = new ChangeListener() {
-        public void stateChanged(ChangeEvent changeEvent) {
-            JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
-            if (sourceTabbedPane.getSelectedIndex() == 0) {
-                refresh();
-            }
+    ChangeListener changeListener = changeEvent -> {
+        JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
+        if (sourceTabbedPane.getSelectedIndex() == 0) {
+            refresh();
         }
     };
 
@@ -395,7 +392,7 @@ public class MainGuiWindow {
      * to be equal to all the found reservations that do.
      */
     public void getAllDeparturesForToday() {
-        ArrayList<Reservation> departures = hc.getDeparuresForToday();
+        ArrayList<Reservation> departures = hc.getDeparturesForToday();
         depCol = new Object[departures.size()][5];
 
         for (int i = 0; i < departures.size(); i++) {
