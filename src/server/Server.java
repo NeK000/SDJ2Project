@@ -13,9 +13,9 @@ public class Server implements OurObservable {
     private Socket clientSocket;
     private final int PORT = 6789;
     //    ToDo: verify if fileAdapter works as static
-    private static FileAdapter fileAdapter = new FileAdapter();
+    private static IFileAdapter fileAdapter = new FileAdapter();
 
-    public static ArrayList<Connection> clientList;
+    public static ArrayList<OurObserver> clientList;
 
     public Server() {
         try {
@@ -26,10 +26,14 @@ public class Server implements OurObservable {
         clientList = new ArrayList<>();
     }
 
-    public synchronized static void createReservation(Reservation reservation) {
+    public synchronized void createReservation(Reservation reservation) {
         System.out.println(reservation.toString());
         fileAdapter.createReservation("reservations.bin", reservation);
-
+        try {
+            updateAll(new Response("create reservation", reservation));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public synchronized static ArrayList<Reservation> getAll() {
@@ -64,18 +68,9 @@ public class Server implements OurObservable {
 
 
     @Override
-    public void updateAll(Reservation reservation) throws IOException {
-        System.out.println("Sending updates");
-        for (Connection item : clientList
-                ) {
-            new Thread(() -> {
-                try {
-                    System.out.println(item.toString());
-                    item.getOutputStream().writeObject(new Response("create reservation", reservation));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }).start();
+    public void updateAll(Response resp) throws IOException {
+        for (OurObserver item : clientList) {
+            item.update(resp);
         }
     }
 
@@ -83,49 +78,19 @@ public class Server implements OurObservable {
     public void updateAll(Reservation old, Reservation newOne) throws IOException {
         Reservation[] res = {old, newOne};
         System.out.println("Sending updates");
-        for (Connection item : clientList
-                ) {
-            new Thread(() -> {
-                try {
-                    item.getOutputStream().writeObject(new Response("update reservation", res));
-                } catch (IOException e) {
-                    //Remove client from list;
-                    clientList.remove(item);
-                }
-            }).start();
-        }
+        updateAll(new Response("update reservation", res));
     }
 
     @Override
     public synchronized void addToInHouse(Reservation reservation) throws IOException {
         fileAdapter.checkIn(reservation);
-        for (Connection item : clientList
-                ) {
-            new Thread(() -> {
-                try {
-                    item.getOutputStream().writeObject(new Response("checkin", reservation));
-                } catch (IOException e) {
-                    //Remove client from list;
-                    clientList.remove(item);
-                }
-            }).start();
-        }
+        updateAll(new Response("checkin", reservation));
     }
 
     @Override
     public void addToPastReservations(Reservation reservation) throws IOException {
         fileAdapter.checkOut(reservation);
-        for (Connection item : clientList
-                ) {
-            new Thread(() -> {
-                try {
-                    item.getOutputStream().writeObject(new Response("checkout", reservation));
-                } catch (IOException e) {
-                    //Remove client from list;
-                    clientList.remove(item);
-                }
-            }).start();
-        }
+        updateAll(new Response("checkout", reservation));
     }
 
     public static ArrayList<Reservation> getAllInHouseGuests() {

@@ -158,23 +158,13 @@ import common.Reservation;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
-/**
- * A class  which later on will be used to save a object from the HotelManager with the help of MyFileIO.
- *
- * @author Nikolay D Nikolav, Yusuf A Farah, Radu G Orleanu, Catalin Udrea
- * @version 1.0
- */
-public class FileAdapter implements Serializable {
+
+public class FileAdapter implements Serializable, IFileAdapter {
     private MyFileIO fileIO = new MyFileIO();
 
-    /**
-     * Writing object to file.
-     *
-     * @param fileName takes file name.
-     * @param object   takes object.
-     */
-
+    @Override
     public void writeToFileObj(String fileName, Object object) {
         try {
             fileIO.writeToFile(fileName, object);
@@ -183,12 +173,8 @@ public class FileAdapter implements Serializable {
         }
     }
 
-    /**
-     * Reading object from file.
-     *
-     * @param fileName takes file name.
-     * @return object
-     */
+
+    @Override
     public Object readFromFileObj(String fileName) {
         Object read = null;
         try {
@@ -201,12 +187,7 @@ public class FileAdapter implements Serializable {
         return read;
     }
 
-    /**
-     * Reading from a file.
-     *
-     * @param fileName takes file name.
-     * @return reservations, an array list containing all guests.
-     */
+    @Override
     public ArrayList<Reservation> getAll(String fileName) {
         ArrayList<Reservation> reservations = new ArrayList<Reservation>();
         Object[] fg = null;
@@ -223,12 +204,7 @@ public class FileAdapter implements Serializable {
         return reservations;
     }
 
-    /**
-     * Append to a file.
-     *
-     * @param fileName    takes file name.
-     * @param reservation takes specific reservation
-     */
+    @Override
     public void createReservation(String fileName, Reservation reservation) {
 
         Object[] read = null;
@@ -244,19 +220,15 @@ public class FileAdapter implements Serializable {
             newValues[i] = read[i];
         }
         newValues[newValues.length - 1] = reservation;
+//        System.out.println("new values for check out: " + Arrays.toString(newValues));
         try {
             fileIO.writeToFile(fileName, newValues);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-    /**
-     * Remove single reservation from file
-     *
-     * @param fileName    takes file name.
-     * @param reservation takes specific reservation.
-     */
+    
+    @Override
     public void removeSingleObjectFromFile(String fileName, Reservation reservation) {
         Object[] read = null;
         try {
@@ -281,26 +253,45 @@ public class FileAdapter implements Serializable {
         }
     }
 
+    @Override
     public void updateReservation(Reservation old, Reservation newOne) {
-        removeSingleObjectFromFile("reservations.bin", old);
-        writeToFileObj("reservations.bin", newOne);
+        Reservation[] temp = (Reservation[]) readFromFileObj("reservations.bin");
+        for (int i = 0; i < temp.length; i++) {
+            if (temp[i].equals(old)) {
+                removeSingleObjectFromFile("reservations.bin", old);
+                writeToFileObj("reservations.bin", newOne);
+                break;
+            }
+        }
+        temp = (Reservation[]) readFromFileObj("inHouseGuests.bin");
+        for (int i = 0; i < temp.length; i++) {
+            if (temp[i].equals(old)) {
+                removeSingleObjectFromFile("inHouseGuests.bin", old);
+                writeToFileObj("inHouseGuests.bin", newOne);
+                break;
+            }
+        }
     }
 
+    @Override
     public void checkIn(Reservation old) {
         removeSingleObjectFromFile("reservations.bin", old);
         createReservation("inHouseGuests.bin", old);
     }
 
+    @Override
     public void checkOut(Reservation old) {
         removeSingleObjectFromFile("inHouseGuests.bin", old);
         createReservation("pastReservations.bin", old);
     }
 
-    public ArrayList<Reservation> getInHouseGuests(){
+    @Override
+    public ArrayList<Reservation> getInHouseGuests() {
         return getAll("inHouseGuests.bin");
     }
 
-    public ArrayList<Reservation> getPast(){
+    @Override
+    public ArrayList<Reservation> getPast() {
         return getAll("pastReservations.bin");
     }
 

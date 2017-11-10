@@ -4,7 +4,6 @@ import common.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -79,8 +78,8 @@ public class MainGuiWindow {
     private CreateReservationWindowGUI createReservationWindowGUI;
     private Search search;
     private CheckAvailability checkAvailability;
-    private CheckOutGUI checkOutGUI = new CheckOutGUI(tabPane, hc);
-    private CheckInGUI checkInGUI = new CheckInGUI(tabPane, hc);
+    private CheckOutGUI checkOutGUI;
+    private CheckInGUI checkInGUI;
 
     private Object[][] arrCol;
     private Object[][] depCol;
@@ -89,12 +88,10 @@ public class MainGuiWindow {
      *
      * @see #refresh()
      */
-    ChangeListener changeListener = new ChangeListener() {
-        public void stateChanged(ChangeEvent changeEvent) {
-            JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
-            if (sourceTabbedPane.getSelectedIndex() == 0) {
-                refresh();
-            }
+    ChangeListener changeListener = changeEvent -> {
+        JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
+        if (sourceTabbedPane.getSelectedIndex() == 0) {
+            refresh();
         }
     };
 
@@ -103,7 +100,7 @@ public class MainGuiWindow {
      * disabling the check-in and check-out tabs and loading all data from the bin files.
      */
     public MainGuiWindow() {
-        this.hc = new HotelController();
+        this.hc = new HotelController(this);
 
         // update The model
 
@@ -133,6 +130,8 @@ public class MainGuiWindow {
         checkAvailability = new CheckAvailability(hc);
         createReservationWindowGUI = new CreateReservationWindowGUI(tabPane, hc);
         search = new Search(tabPane, hc);
+        checkInGUI = new CheckInGUI(tabPane, hc);
+        checkOutGUI = new CheckOutGUI(tabPane, hc);
 
         mainWindow();
 
@@ -171,9 +170,10 @@ public class MainGuiWindow {
         arrivals.clear();
         departures.clear();
 
-
-        getAllDeparturesForToday();
-        getAllArrivalsForToday();
+        getArrivalsForToday();
+        getDeparturesForToday();
+        getAllDeparturesForToday(departures);
+        getAllArrivalsForToday(arrivals);
         getAllInHouseGuests();
 
         left.revalidate();
@@ -395,7 +395,7 @@ public class MainGuiWindow {
      * to be equal to all the found reservations that do.
      */
     public void getAllDeparturesForToday() {
-        ArrayList<Reservation> departures = hc.getDeparuresForToday();
+        ArrayList<Reservation> departures = hc.getDeparturesForToday();
         depCol = new Object[departures.size()][5];
 
         for (int i = 0; i < departures.size(); i++) {
@@ -473,7 +473,8 @@ public class MainGuiWindow {
      * is added as data to the allInHouseGuests table.
      */
     public void getAllInHouseGuests() {
-        Reservation[] all = hc.getAllReservations();
+        Reservation[] all = hc.getInHouse();
+        inHouseGuestsArray.clear();
         inHouseGuestsArray.addAll(Arrays.asList(all));
         Object[][] dataIHG = new Object[inHouseGuestsArray.size()][8];
         for (int i = 0; i < inHouseGuestsArray.size(); i++) {

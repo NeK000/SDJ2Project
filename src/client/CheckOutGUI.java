@@ -150,8 +150,7 @@ public class CheckOutGUI {
     private class MyButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == checkOutButton) {
-                // toDo Un-comment ... when check in implememnted.
-//                hc.checkOut(reservation);
+                hc.checkOut(reservation);
                 parent.setSelectedIndex(0);
             }
             if (e.getSource() == cancel) {
