@@ -78,8 +78,8 @@ public class MainGuiWindow {
     private CreateReservationWindowGUI createReservationWindowGUI;
     private Search search;
     private CheckAvailability checkAvailability;
-    private CheckOutGUI checkOutGUI = new CheckOutGUI(tabPane, hc);
-    private CheckInGUI checkInGUI = new CheckInGUI(tabPane, hc);
+    private CheckOutGUI checkOutGUI;
+    private CheckInGUI checkInGUI;
 
     private Object[][] arrCol;
     private Object[][] depCol;
@@ -100,7 +100,7 @@ public class MainGuiWindow {
      * disabling the check-in and check-out tabs and loading all data from the bin files.
      */
     public MainGuiWindow() {
-        this.hc = new HotelController();
+        this.hc = new HotelController(this);
 
         // update The model
 
@@ -130,6 +130,8 @@ public class MainGuiWindow {
         checkAvailability = new CheckAvailability(hc);
         createReservationWindowGUI = new CreateReservationWindowGUI(tabPane, hc);
         search = new Search(tabPane, hc);
+        checkInGUI = new CheckInGUI(tabPane, hc);
+        checkOutGUI = new CheckOutGUI(tabPane, hc);
 
         mainWindow();
 
@@ -168,9 +170,10 @@ public class MainGuiWindow {
         arrivals.clear();
         departures.clear();
 
-
-        getAllDeparturesForToday();
-        getAllArrivalsForToday();
+        getArrivalsForToday();
+        getDeparturesForToday();
+        getAllDeparturesForToday(departures);
+        getAllArrivalsForToday(arrivals);
         getAllInHouseGuests();
 
         left.revalidate();
@@ -470,7 +473,8 @@ public class MainGuiWindow {
      * is added as data to the allInHouseGuests table.
      */
     public void getAllInHouseGuests() {
-        Reservation[] all = hc.getAllReservations();
+        Reservation[] all = hc.getInHouse();
+        inHouseGuestsArray.clear();
         inHouseGuestsArray.addAll(Arrays.asList(all));
         Object[][] dataIHG = new Object[inHouseGuestsArray.size()][8];
         for (int i = 0; i < inHouseGuestsArray.size(); i++) {

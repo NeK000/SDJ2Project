@@ -158,6 +158,7 @@ import common.Reservation;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class FileAdapter implements Serializable, IFileAdapter {
@@ -219,6 +220,7 @@ public class FileAdapter implements Serializable, IFileAdapter {
             newValues[i] = read[i];
         }
         newValues[newValues.length - 1] = reservation;
+//        System.out.println("new values for check out: " + Arrays.toString(newValues));
         try {
             fileIO.writeToFile(fileName, newValues);
         } catch (IOException e) {

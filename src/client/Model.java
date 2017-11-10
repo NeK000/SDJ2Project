@@ -4,7 +4,6 @@ import common.DateHandler;
 import common.Reservation;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 //ToDO  :  the model should trigger an update to the GUI each time a update is made
@@ -13,6 +12,11 @@ public class Model {
     private Reservation[] reservations;
     private Reservation[] inHouse;
     private Reservation[] pastReservations;
+    private MainGuiWindow mainGuiWindow;
+
+    public Model(MainGuiWindow mg) {
+        this.mainGuiWindow = mg;
+    }
 
     public Reservation getReservation(Reservation r) {
         for (Reservation res : reservations) {
@@ -32,9 +36,17 @@ public class Model {
         }
     }
 
+    public void createReservation(Reservation reservation) {
+        addToArray(reservations, reservation, "reservations");
+        mainGuiWindow.refresh();
+    }
+
     public void updateReservation(Reservation[] reservations_) {
+
         Reservation old_ = reservations_[0];
         Reservation new_ = reservations_[1];
+
+        System.out.println("updating: " + old_.getGuest() + " -> " + new_.getGuest());
 
         if(indexOf(reservations, old_) >= 0) {
             replace(reservations, old_, new_);
@@ -47,45 +59,13 @@ public class Model {
         if(indexOf(pastReservations, old_) >= 0) {
             replace(reservations, old_, new_);
         }
-
-//        for (int i = 0; i < this.reservations.length; i++) {
-//            if (this.reservations[i].equals(old_)) {
-//                this.reservations[i] = new_;
-//            }
-//        }
+        mainGuiWindow.refresh();
     }
 
-//    public void checkIn(Reservation reservation) {
-//        addFromReservationsToInHouse(reservation);
-//    }
-
     public void checkIn(Reservation reservation) {
-
-//        ArrayList<Reservation> _reservations = new ArrayList<>();
-//        ArrayList<Reservation> _inHouse = new ArrayList<>();
-//
-//        for (int i = 0; i < reservations.length; i++) {
-//            if (!reservations[i].equals(reservation)) {
-//                _reservations.add(reservations[i]);
-//            }
-//        }
-//
-//        _inHouse.addAll(Arrays.asList(reservations));
-//
-//        _inHouse.add(reservation);
-//
-//        Reservation[] res = new Reservation[_reservations.size()];
-//        Reservation[] in = new Reservation[_inHouse.size()];
-//
-//        res = _reservations.toArray(res);
-//        in = _inHouse.toArray(in);
-//
-//
-//        reservations = res;
-//        inHouse = in;
-        removeReservation(reservations, reservation);
-        addToArray(inHouse, reservation);
-
+        removeReservation(reservations, reservation, "reservations");
+        addToArray(inHouse, reservation, "inHouse");
+        mainGuiWindow.refresh();
     }
 
     public void checkOut(Reservation reservation) {
@@ -93,12 +73,13 @@ public class Model {
             if (r.equals(reservation))
                 checkOutUpdate(reservation);
         }
+        mainGuiWindow.refresh();
     }
 
     public void checkOutUpdate(Reservation r) {
 
-        removeReservation(inHouse, r);
-        addToArray(pastReservations, r);
+        removeReservation(inHouse, r, "inHouse");
+        addToArray(pastReservations, r, "pastReservations");
     }
 
     public ArrayList<Reservation> getDeparturesForToday() {
@@ -137,22 +118,24 @@ public class Model {
         this.pastReservations = pastReservations;
     }
 
-    public void removeReservation(Reservation[] arr, Reservation r) {
+    public void removeReservation(Reservation[] arr, Reservation r, String name) {
         Reservation[] collect = new Reservation[arr.length - 1];
-
-        int index = indexOf(arr, r);
         int count = 0;
-
-        for (int i = 0; i < arr.length; i++) {
-            if (i != index) {
+        for(int i = 0; i < arr.length; i++) {
+            if(!arr[i].equals(r)) {
                 collect[count] = arr[i];
                 count++;
-
             }
-
         }
 
-        arr = collect;
+        if(name.equals("inHouse")) {
+            inHouse = collect;
+        }
+        else if(name.equals("pastReservations")){
+            pastReservations = collect;
+        } else {
+            reservations = collect;
+        }
 
     }
 
@@ -167,13 +150,20 @@ public class Model {
         return -1;
     }
 
-    public void addToArray(Reservation[] arr, Reservation r) {
+    public void addToArray(Reservation[] arr, Reservation r, String name) {
         Reservation[] a = new Reservation[arr.length + 1];
         for(int i = 0; i < arr.length; i++) {
             a[i] = arr[i];
         }
         a[a.length - 1] = r;
-        arr = a;
+        if(name.equals("inHouse")) {
+            inHouse = a;
+        }
+        else if(name.equals("pastReservations")){
+            pastReservations = a;
+        } else {
+            reservations = a;
+        }
     }
 
 }

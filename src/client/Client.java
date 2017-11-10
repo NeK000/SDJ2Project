@@ -83,6 +83,12 @@ public class Client implements Serializable {
                             model.checkOut(response.getParameter());
 
                         }
+
+                        if(response.getResponse().toLowerCase().equals("create reservation")) {
+                            System.out.println("received from server " + response);
+                            model.createReservation(response.getParameter());
+
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
