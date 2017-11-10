@@ -131,5 +131,12 @@ public class Connection implements Runnable, OurObserver {
         server.addToInHouse(reservation);
     }
 
-
+    @Override
+    public void writeObject(Response response) {
+        try {
+            getOutputStream().writeObject(response);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
