@@ -163,36 +163,177 @@ import java.util.Arrays;
 
 public class FileAdapter implements Serializable, IFileAdapter {
     private MyFileIO fileIO = new MyFileIO();
+    private String currentReservations;
+    private String pastReservations;
+    private String inHouseReservations;
 
-    @Override
-    public void writeToFileObj(String fileName, Object object) {
-        try {
-            fileIO.writeToFile(fileName, object);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public FileAdapter(String reservations, String pastReservations, String inHouseReservations) {
+        this.currentReservations = reservations;
+        this.pastReservations = pastReservations;
+        this.inHouseReservations = inHouseReservations;
     }
 
+    @Override
+    public ArrayList<Reservation> getAll() {
+        return getAllFromFile(currentReservations);
+    }
 
     @Override
-    public Object readFromFileObj(String fileName) {
-        Object read = null;
+    public void createReservation(Reservation reservation) {
+
+        if (reservation == null) {
+            throw new IllegalArgumentException("Null not allowed");
+        }
+        Object[] read = null;
         try {
-            read = fileIO.readObjectFromFile(fileName);
+            read = fileIO.readArrayFromFile(currentReservations);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return read;
+        Object[] newValues = new Object[read.length + 1];
+        for (int i = 0; i < read.length; i++) {
+            newValues[i] = read[i];
+        }
+        newValues[newValues.length - 1] = reservation;
+        try {
+            fileIO.writeToFile(currentReservations, newValues);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
+    public void updateReservation(Reservation old, Reservation newOne) {
+        if (old == null || newOne == null) {
+            throw new IllegalArgumentException("Null not allowed");
+        }
+        boolean check = false;
+//        Reservation[] temp = readArray(currentReservations);
+//
+//        for (int i = 0; i < temp.length; i++) {
+//            if (temp[i].equals(old)) {
+//                check = true;
+//                removeSingleObjectFromFile(currentReservations, old);
+//                writeToFileObj(currentReservations, newOne);
+//                break;
+//            }
+//        }
+//        if (!check) {
+//            temp = (Reservation[]) readFromFileObj(inHouseReservations);
+//            for (int i = 0; i < temp.length; i++) {
+//                if (temp[i].equals(old)) {
+//                    removeSingleObjectFromFile(inHouseReservations, old);
+//                    writeToFileObj(inHouseReservations, newOne);
+//                    break;
+//                }
+//            }
+//        }
+        ArrayList<Reservation> current = getAll();
+        ArrayList<Reservation> inHouse = getInHouseGuests();
+        for (Reservation item : current
+                ) {
+            if (item.equals(old)) {
+                removeSingleObjectFromFile(currentReservations, old);
+                appendToFile(currentReservations, newOne);
+                check = true;
+            }
+        }
+        if (!check) {
+            for (Reservation item : inHouse
+                    ) {
+                if (item.equals(old))
+                    removeSingleObjectFromFile(inHouseReservations, old);
+                appendToFile(inHouseReservations, newOne);
+            }
+        }
+    }
+
+
+    @Override
+    public void checkIn(Reservation old) {
+        if (old == null) {
+            throw new IllegalArgumentException("Null not allowed");
+        }
+        appendToFile(inHouseReservations, old);
+        removeSingleObjectFromFile(currentReservations, old);
+        //        createReservation(inHouseReservations, old);
     }
 
     @Override
-    public ArrayList<Reservation> getAll(String fileName) {
+    public void checkOut(Reservation old) {
+        if (old == null) {
+            throw new IllegalArgumentException("Null not allowed");
+        }
+        removeSingleObjectFromFile(inHouseReservations, old);
+//        createReservation(pastReservations, old);
+        appendToFile(pastReservations, old);
+    }
+
+    @Override
+    public ArrayList<Reservation> getInHouseGuests() {
+        return getAllFromFile(inHouseReservations);
+    }
+
+    @Override
+    public ArrayList<Reservation> getPast() {
+        return getAllFromFile(pastReservations);
+    }
+
+    private Reservation[] readArray(String filename) {
+        Object[] temps = new Object[0];
+        try {
+            temps = fileIO.readArrayFromFile(currentReservations);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        Reservation[] temp = new Reservation[temps.length];
+        for (int i = 0; i < temps.length; i++) {
+            temp[0] = (Reservation) temps[0];
+        }
+        return temp;
+    }
+
+    private void removeSingleObjectFromFile(String fileName, Reservation reservation) {
+        Object[] read = null;
+        try {
+            read = fileIO.readArrayFromFile(fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (read.length == 0) {
+            throw new IllegalStateException("File empty");
+        }
+
+        ArrayList<Object> lessValues = new ArrayList<Object>();
+        for (int i = 0; i < read.length; i++) {
+//            Reservation temp = (Reservation) read[i];
+            if (!(read[i].equals(reservation))) {
+
+                lessValues.add(read[i]);
+            }
+        }
+        Object[] temp = new Object[lessValues.size()];
+        lessValues.toArray(temp);
+        try {
+            fileIO.writeToFile(fileName, temp);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private ArrayList<Reservation> getAllFromFile(String filename) {
         ArrayList<Reservation> reservations = new ArrayList<Reservation>();
         Object[] fg = null;
         try {
-            fg = fileIO.readArrayFromFile(fileName);
+            fg = fileIO.readArrayFromFile(filename);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -204,8 +345,15 @@ public class FileAdapter implements Serializable, IFileAdapter {
         return reservations;
     }
 
-    @Override
-    public void createReservation(String fileName, Reservation reservation) {
+//    private void writeToFileObj(String fileName, Object object) {
+//        try {
+//            fileIO.writeToFile(fileName, object);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    private void appendToFile(String fileName, Reservation reservation) {
 
         Object[] read = null;
         try {
@@ -220,90 +368,24 @@ public class FileAdapter implements Serializable, IFileAdapter {
             newValues[i] = read[i];
         }
         newValues[newValues.length - 1] = reservation;
-//        System.out.println("new values for check out: " + Arrays.toString(newValues));
         try {
             fileIO.writeToFile(fileName, newValues);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    
-    @Override
-    public void removeSingleObjectFromFile(String fileName, Reservation reservation) {
-        Object[] read = null;
+
+    private Object readFromFileObj(String fileName) {
+        Object read = null;
         try {
-            read = fileIO.readArrayFromFile(fileName);
+            read = fileIO.readObjectFromFile(fileName);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        ArrayList<Object> lessValues = new ArrayList<Object>();
-        for (int i = 0; i < read.length; i++) {
-            if (!(read[i].equals(reservation))) {
-                lessValues.add(read[i]);
-            }
-        }
-        Object[] temp = new Object[lessValues.size()];
-        lessValues.toArray(temp);
-        try {
-            fileIO.writeToFile(fileName, temp);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return read;
     }
 
-    @Override
-    public void updateReservation(Reservation old, Reservation newOne) {
-        Reservation[] temp = (Reservation[]) readFromFileObj("reservations.bin");
-        for (int i = 0; i < temp.length; i++) {
-            if (temp[i].equals(old)) {
-                removeSingleObjectFromFile("reservations.bin", old);
-                writeToFileObj("reservations.bin", newOne);
-                break;
-            }
-        }
-        temp = (Reservation[]) readFromFileObj("inHouseGuests.bin");
-        for (int i = 0; i < temp.length; i++) {
-            if (temp[i].equals(old)) {
-                removeSingleObjectFromFile("inHouseGuests.bin", old);
-                writeToFileObj("inHouseGuests.bin", newOne);
-                break;
-            }
-        }
-    }
-
-    @Override
-    public void checkIn(Reservation old) {
-        removeSingleObjectFromFile("reservations.bin", old);
-        createReservation("inHouseGuests.bin", old);
-    }
-
-    @Override
-    public void checkOut(Reservation old) {
-        removeSingleObjectFromFile("inHouseGuests.bin", old);
-        createReservation("pastReservations.bin", old);
-    }
-
-    @Override
-    public ArrayList<Reservation> getInHouseGuests() {
-        return getAll("inHouseGuests.bin");
-    }
-
-    @Override
-    public ArrayList<Reservation> getPast() {
-        return getAll("pastReservations.bin");
-    }
-
-//    public static void main(String[] args) {
-//        FileAdapter james = new FileAdapter();
-//        Reservation first = new Reservation(new Guest(new Name("steven", "george", "someGuy"), 1234278901, new Address("Romania", "SomeCity", "8700", "someStreet"), "Romanian",
-//                ("31, 10, 1988")), new Arrival(new DateHandler(01, 11, 2017)), new Departure(new DateHandler(02, 11, 2017)), "king sized", true, true,
-//                true);
-//        james.writeToFileObj("pastReservations.bin", first);
-//        Reservation[] a = new Reservation[10];
-//        a[0] = (Reservation)james.readFromFileObj("pastReservations.bin");
-//        System.out.println(Arrays.toString(a));
-//    }
 
 }

@@ -28,8 +28,8 @@ public class Model {
     }
 
     private void replace(Reservation[] arr, Reservation old_, Reservation new_) {
-        for(int i = 0; i < arr.length; i++) {
-            if(arr[i].equals(old_)) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i].equals(old_)) {
                 arr[i] = new_;
                 break;
             }
@@ -48,15 +48,15 @@ public class Model {
 
         System.out.println("updating: " + old_.getGuest() + " -> " + new_.getGuest());
 
-        if(indexOf(reservations, old_) >= 0) {
+        if (indexOf(reservations, old_) >= 0) {
             replace(reservations, old_, new_);
         }
 
-        if(indexOf(inHouse, old_) >= 0) {
+        if (indexOf(inHouse, old_) >= 0) {
             replace(reservations, old_, new_);
         }
 
-        if(indexOf(pastReservations, old_) >= 0) {
+        if (indexOf(pastReservations, old_) >= 0) {
             replace(reservations, old_, new_);
         }
         mainGuiWindow.refresh();
@@ -85,7 +85,7 @@ public class Model {
     public ArrayList<Reservation> getDeparturesForToday() {
         ArrayList<Reservation> departures = new ArrayList<>();
         DateHandler d = new DateHandler(1, 1, 1);
-        for (Reservation r: inHouse) {
+        for (Reservation r : inHouse) {
             if (r.getDeparture().getCheckOutDate().equals(d.currentDate())) {
                 departures.add(r);
             }
@@ -121,17 +121,16 @@ public class Model {
     public void removeReservation(Reservation[] arr, Reservation r, String name) {
         Reservation[] collect = new Reservation[arr.length - 1];
         int count = 0;
-        for(int i = 0; i < arr.length; i++) {
-            if(!arr[i].equals(r)) {
+        for (int i = 0; i < arr.length; i++) {
+            if (!arr[i].equals(r)) {
                 collect[count] = arr[i];
                 count++;
             }
         }
 
-        if(name.equals("inHouse")) {
+        if (name.equals("inHouse")) {
             inHouse = collect;
-        }
-        else if(name.equals("pastReservations")){
+        } else if (name.equals("pastReservations")) {
             pastReservations = collect;
         } else {
             reservations = collect;
@@ -152,14 +151,13 @@ public class Model {
 
     public void addToArray(Reservation[] arr, Reservation r, String name) {
         Reservation[] a = new Reservation[arr.length + 1];
-        for(int i = 0; i < arr.length; i++) {
+        for (int i = 0; i < arr.length; i++) {
             a[i] = arr[i];
         }
         a[a.length - 1] = r;
-        if(name.equals("inHouse")) {
+        if (name.equals("inHouse")) {
             inHouse = a;
-        }
-        else if(name.equals("pastReservations")){
+        } else if (name.equals("pastReservations")) {
             pastReservations = a;
         } else {
             reservations = a;
