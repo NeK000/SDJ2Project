@@ -6,16 +6,9 @@ import java.util.ArrayList;
 
 public interface IFileAdapter {
 
+    ArrayList<Reservation> getAll();
 
-    void writeToFileObj(String fileName, Object object);
-
-    Object readFromFileObj(String fileName);
-    
-    ArrayList<Reservation> getAll(String fileName);
-
-    void createReservation(String fileName, Reservation reservation);
-
-    void removeSingleObjectFromFile(String fileName, Reservation reservation);
+    void createReservation(Reservation reservation);
 
     void updateReservation(Reservation old, Reservation newOne);
 

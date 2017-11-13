@@ -1,6 +1,7 @@
 package client;
 
 import common.*;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 
 /**
  * A class for creating the Create Reservation tab in the GUI.
+ *
  * @author Nikolay D Nikolov, Radu G Orleanu
  * @version 1.0
  */
@@ -44,19 +46,21 @@ public class CreateReservationWindowGUI {
     private ArrayList<Reservation> foundNames;
     private MyListSelectionListener tableSelect;
     private Reservation chosenReservation;
-//    private FileAdapter fa = new FileAdapter();
+    //    private FileAdapter fa = new FileAdapter();
     private boolean isSearch = false;
     private JTabbedPane parent;
 
     /**
      * Constructor for initializing the required methods
+     *
      * @param parent representing the JTabbedPane where the Create Reservation Tab will be in
      */
 
-    public CreateReservationWindowGUI(JTabbedPane parent,HotelController hc) {
+    public CreateReservationWindowGUI(JTabbedPane parent, HotelController hc) {
 
         this.hc = hc;
-        if (this.getClass().getName().equals("Search")) {
+        System.out.println(this.getClass().getName().toString());
+        if (this.getClass().getName().equals("client.Search")) {
             isSearch = true;
         }
 
@@ -453,7 +457,6 @@ public class CreateReservationWindowGUI {
     }
 
 
-
     /**
      * A method used to get all the guests in an array list.
      */
@@ -466,7 +469,6 @@ public class CreateReservationWindowGUI {
 
         ArrayList<Reservation> inHouse = new ArrayList<>();
         inHouse.addAll(Arrays.asList(hc.getInHouse()));
-
 
 
         ArrayList<Reservation> temp = new ArrayList<>();
@@ -575,6 +577,9 @@ public class CreateReservationWindowGUI {
         // toDo ( Yusuf ) No file adapter .. so i commented below code.
 //        fa.removeSingleObjectFromFile("reservations.bin", r);
 //        fa.appendToFile("reservations.bin", reservation);
+        Reservation old = r;
+        hc.updateReservation(r, reservation);
+
     }
 
     /**

@@ -10,14 +10,14 @@ import java.util.ArrayList;
 
 public class Server implements OurObservable {
     private ServerSocket serverSocket;
-    private Socket clientSocket;
     private final int PORT = 6789;
     //    ToDo: verify if fileAdapter works as static
-    private static IFileAdapter fileAdapter = new FileAdapter();
+    private static IFileAdapter fileAdapter;
 
     public static ArrayList<OurObserver> clientList;
 
     public Server() {
+        fileAdapter = new FileAdapter("reservations.bin", "pastReservations.bin", "inHouseGuests.bin");
         try {
             serverSocket = new ServerSocket(PORT);
         } catch (IOException e) {
@@ -28,7 +28,7 @@ public class Server implements OurObservable {
 
     public synchronized void createReservation(Reservation reservation) {
         System.out.println(reservation.toString());
-        fileAdapter.createReservation("reservations.bin", reservation);
+        fileAdapter.createReservation(reservation);
         try {
             updateAll(new Response("create reservation", reservation));
         } catch (IOException e) {
@@ -37,12 +37,10 @@ public class Server implements OurObservable {
     }
 
     public synchronized static ArrayList<Reservation> getAll() {
-        return fileAdapter.getAll("reservations.bin");
+        return fileAdapter.getAll();
     }
 
     public synchronized static void updateReservation(Reservation old, Reservation newOne) {
-//        System.out.println(old.toString());
-//        System.out.println(newOne.toString());
         fileAdapter.updateReservation(old, newOne);
     }
 
