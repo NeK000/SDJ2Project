@@ -1,12 +1,15 @@
 package client;
 
 import common.DateHandler;
+import common.Price;
 import common.Request;
 import common.Reservation;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * A class containing methods which later on will be used from our GUI.
@@ -33,8 +36,16 @@ public class HotelController implements Serializable {
         return 0.0;
     }
 
-    public double getTotalPrice(Reservation r, Double something) {
-        return 0.0;
+    public double getTotalPrice(Reservation r) {
+        Calendar cal = new GregorianCalendar(r.getArrival().getCheckInDate().getYear(),
+                r.getArrival().getCheckInDate().getMonth() - 1,
+                r.getArrival().getCheckInDate().getDay());
+        Calendar cal2 = new GregorianCalendar(r.getDeparture().getCheckOutDate().getYear(),
+                r.getDeparture().getCheckOutDate().getMonth() - 1,
+                r.getDeparture().getCheckOutDate().getDay());
+        int total = cal2.get(Calendar.DAY_OF_YEAR) - cal.get(Calendar.DAY_OF_YEAR);
+        double totalPrice = new Price().getRoomPrice(r.getRoomType()) * total;
+        return totalPrice;
     }
 
 //    private common.Price price;
