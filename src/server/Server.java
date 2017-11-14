@@ -80,9 +80,10 @@ public class Server implements OurObservable {
     }
 
     @Override
-    public synchronized void addToInHouse(Reservation reservation) throws IOException {
-        fileAdapter.checkIn(reservation);
-        updateAll(new Response("checkin", reservation));
+    public synchronized void addToInHouse(Reservation reservation, Reservation newForCheckIn) throws IOException {
+        fileAdapter.checkIn(reservation, newForCheckIn);
+        Reservation[] reservations = {reservation, newForCheckIn};
+        updateAll(new Response("checkin", reservations));
     }
 
     @Override

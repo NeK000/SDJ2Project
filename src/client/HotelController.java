@@ -125,6 +125,7 @@ public class HotelController implements Serializable {
         return model.getInHouse();
     }
 
+
     // used for pastReservations.bin
     public Reservation[] getPastReservations() {
         if (model.getPastReservations() == null) {
@@ -135,8 +136,12 @@ public class HotelController implements Serializable {
         return model.getPastReservations();
     }
 
-    public void checkIn(Reservation reservation) {
-        client.sendRequest(new Request("checkin", reservation), model);
+    public void checkIn(Reservation reservation, int roomNumber) {
+        Reservation temp = reservation.copy();
+        reservation.setRoomNumber(roomNumber);
+        Reservation[] param = new Reservation[]{temp, reservation};
+        client.sendRequest(new Request("checkin", param, true), model);
+
     }
 
     public void checkOut(Reservation r) {

@@ -74,7 +74,7 @@ public class Connection implements Runnable, OurObserver {
             }
             if (newRequest.getType().equalsIgnoreCase("checkin")) {
                 try {
-                    updateOnInHouse(newRequest.getParameter());
+                    updateOnInHouse(newRequest.getReservations()[0], newRequest.getReservations()[1]);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
@@ -118,10 +118,10 @@ public class Connection implements Runnable, OurObserver {
     }
 
 
-
     @Override
-    public void updateOnInHouse(Reservation reservation) throws IOException {
-        server.addToInHouse(reservation);
+    public void updateOnInHouse(Reservation reservation, Reservation forCheckIn) throws IOException {
+
+        server.addToInHouse(reservation, forCheckIn);
     }
 
     @Override

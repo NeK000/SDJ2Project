@@ -253,11 +253,12 @@ public class FileAdapter implements Serializable, IFileAdapter {
 
 
     @Override
-    public void checkIn(Reservation old) {
+    public void checkIn(Reservation old, Reservation newOne) {
         if (old == null) {
             throw new IllegalArgumentException("Null not allowed");
         }
-        appendToFile(inHouseReservations, old);
+        appendToFile(inHouseReservations, newOne);
+        System.out.println(newOne.getRoomNumber());
         removeSingleObjectFromFile(currentReservations, old);
         //        createReservation(inHouseReservations, old);
     }

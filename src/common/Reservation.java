@@ -210,7 +210,9 @@ public class Reservation implements Serializable {
      */
     @Override
     public String toString() {
+
         return "common.Reservation{" +
+                "room number=" + roomNumber +
                 "guest=" + guest +
                 ", arrival=" + arrival +
                 ", departure=" + departure +
@@ -218,6 +220,7 @@ public class Reservation implements Serializable {
                 ", bookingInitiator=" + bookingInitiator +
                 ", lateArrivalNotice=" + lateArrivalNotice +
                 ", priorityGuest=" + priorityGuest +
+
                 '}';
     }
 }

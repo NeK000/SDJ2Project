@@ -12,7 +12,7 @@ public interface IFileAdapter {
 
     void updateReservation(Reservation old, Reservation newOne);
 
-    void checkIn(Reservation old);
+    void checkIn(Reservation old,Reservation newOne);
 
     void checkOut(Reservation old);
 

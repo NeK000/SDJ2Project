@@ -169,7 +169,6 @@ public class MainGuiWindow {
     public void refresh() {
         arrivals.clear();
         departures.clear();
-
         getArrivalsForToday();
         getDeparturesForToday();
         getAllDeparturesForToday(departures);
@@ -505,8 +504,8 @@ public class MainGuiWindow {
             if (e.getSource() == leftButton) {
                 if (allArrivalsTable.getSelectedRow() >= 0) {
                     checkInGUI.getDataForCheckIn(arrivals.get(allArrivalsTable.getSelectedRow()));
-                    checkInGUI.setRoomNumber(arrivals.get(allArrivalsTable.getSelectedRow()), hc.getInHouse());
                     tabPane.setSelectedIndex(5);
+                    checkInGUI.setRoomNumber(hc.getInHouse());
                     refresh();
                 }
             }

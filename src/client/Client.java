@@ -62,29 +62,29 @@ public class Client implements Serializable {
                             model.setReservations(response.getAllParameters());
                         }
 
-                        if(response.getResponse().toLowerCase().equals("inhouse")) {
+                        if (response.getResponse().toLowerCase().equals("inhouse")) {
                             System.out.println("received from server for inhouse " + response);
                             model.setInHouse(response.getAllParameters());
                         }
 
-                        if(response.getResponse().toLowerCase().equals("past")) {
+                        if (response.getResponse().toLowerCase().equals("past")) {
                             System.out.println("received from server " + response);
                             model.setPastReservations(response.getAllParameters());
                         }
 
-                        if(response.getResponse().toLowerCase().equals("checkin")) {
+                        if (response.getResponse().toLowerCase().equals("checkin")) {
                             System.out.println("received from server " + response);
-                            model.checkIn(response.getParameter());
+                            model.checkIn(response.getAllParameters());
 
                         }
 
-                        if(response.getResponse().toLowerCase().equals("checkout")) {
+                        if (response.getResponse().toLowerCase().equals("checkout")) {
                             System.out.println("received from server " + response);
                             model.checkOut(response.getParameter());
 
                         }
 
-                        if(response.getResponse().toLowerCase().equals("create reservation")) {
+                        if (response.getResponse().toLowerCase().equals("create reservation")) {
                             System.out.println("received from server " + response);
                             model.createReservation(response.getParameter());
 

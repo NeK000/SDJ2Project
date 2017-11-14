@@ -1,6 +1,7 @@
 package client;
 
 import common.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -148,9 +149,9 @@ public class CheckInGUI {
     private class MyButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == checkIn) {
-
-                hc.checkIn(res);
+                hc.checkIn(res, (int) roomNumberField.getSelectedItem());
                 parent.setSelectedIndex(0);
+
             }
             if (e.getSource() == cancel) {
                 roomNumberField = new JComboBox();
@@ -183,15 +184,14 @@ public class CheckInGUI {
 
     /**
      * A method to set room numbers for each roomType and add the empty rooms to the roomNumberField comboBox
-     *
-     * @param res the specific reservation
+     * <p>
+     * //     * @param res the specific reservation
      */
 
-    public void setRoomNumber(Reservation res, Reservation[] h) {
+    public void setRoomNumber(Reservation[] h) {
 
         ArrayList<Reservation> inHouse = new ArrayList<>();
         inHouse.addAll(Arrays.asList(h));
-
         singleRooms = generateRoomNumber(101, 110);
         twinRoom = generateRoomNumber(111, 116);
         kingSize = generateRoomNumber(117, 119);
@@ -204,7 +204,6 @@ public class CheckInGUI {
         doubleSuite.add(302);
         tripleSuite = new ArrayList<Integer>();
         tripleSuite.add(301);
-
 
         for (int i = 0; i < inHouse.size(); i++) {
             if (singleRooms.contains(inHouse.get(i).getRoomNumber())) {
@@ -226,13 +225,10 @@ public class CheckInGUI {
                 tripleSuite.remove(tripleSuite.indexOf(inHouse.get(i).getRoomNumber()));
             }
         }
-        roomNumberField.revalidate();
-
+        roomNumberField.removeAllItems();
 
         if (res.getRoomType().equals("single room")) {
-
             for (int i = 0; i < singleRooms.size(); i++) {
-
                 roomNumberField.addItem(singleRooms.get(i));
             }
         }

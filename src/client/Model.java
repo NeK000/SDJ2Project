@@ -58,9 +58,9 @@ public class Model {
         mainGuiWindow.refresh();
     }
 
-    public void checkIn(Reservation reservation) {
-        reservations.remove(reservation);
-        inHouse.add(reservation);
+    public void checkIn(Reservation[] reservation) {
+        reservations.remove(reservation[0]);
+        inHouse.add(reservation[1]);
         mainGuiWindow.refresh();
     }
 
@@ -116,7 +116,7 @@ public class Model {
     }
 
     private Reservation[] listToArr(LinkedList<Reservation> list) {
-        if(list == null) {
+        if (list == null) {
             return null;
         }
         Reservation[] arr = new Reservation[list.size()];
@@ -125,7 +125,6 @@ public class Model {
             arr[count] = r;
             count++;
         }
-        System.out.println(Arrays.toString(arr));
         return arr;
     }
 

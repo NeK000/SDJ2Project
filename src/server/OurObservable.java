@@ -13,7 +13,7 @@ public interface OurObservable {
 
     public void updateAll(Reservation old, Reservation newOne) throws IOException;
 
-    public void addToInHouse(Reservation reservation) throws IOException;
+    public void addToInHouse(Reservation reservation, Reservation newForCheckIn) throws IOException;
 
     public void addToPastReservations(Reservation reservation) throws IOException;
 

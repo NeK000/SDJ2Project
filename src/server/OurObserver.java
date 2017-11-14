@@ -10,7 +10,7 @@ public interface OurObserver {
 
 //    public void createResUpdate(Reservation reservation) throws IOException;
 
-    public void updateOnInHouse(Reservation reservation) throws IOException;
+    public void updateOnInHouse(Reservation reservation, Reservation reservation2) throws IOException;
 
     public void writeObject(Response response);
 
