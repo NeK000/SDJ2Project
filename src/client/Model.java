@@ -1,17 +1,19 @@
 package client;
 
+import client.linkedList.LinkedList;
 import common.DateHandler;
 import common.Reservation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 //ToDO  :  the model should trigger an update to the GUI each time a update is made
 public class Model {
 
-    private Reservation[] reservations;
-    private Reservation[] inHouse;
-    private Reservation[] pastReservations;
+    private LinkedList<Reservation> reservations;
+    private LinkedList<Reservation> inHouse;
+    private LinkedList<Reservation> pastReservations;
     private MainGuiWindow mainGuiWindow;
 
     public Model(MainGuiWindow mg) {
@@ -27,17 +29,8 @@ public class Model {
         return null;
     }
 
-    private void replace(Reservation[] arr, Reservation old_, Reservation new_) {
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i].equals(old_)) {
-                arr[i] = new_;
-                break;
-            }
-        }
-    }
-
     public void createReservation(Reservation reservation) {
-        addToArray(reservations, reservation, "reservations");
+        reservations.add(reservation);
         mainGuiWindow.refresh();
     }
 
@@ -48,38 +41,33 @@ public class Model {
 
         System.out.println("updating: " + old_.getGuest() + " -> " + new_.getGuest());
 
-        if (indexOf(reservations, old_) >= 0) {
-            replace(reservations, old_, new_);
+        if (reservations.contains(old_)) {
+            reservations.remove(old_);
+            reservations.add(new_);
         }
 
-        if (indexOf(inHouse, old_) >= 0) {
-            replace(reservations, old_, new_);
+        if (inHouse.contains(old_)) {
+            inHouse.remove(old_);
+            inHouse.add(new_);
         }
 
-        if (indexOf(pastReservations, old_) >= 0) {
-            replace(reservations, old_, new_);
+        if (pastReservations.contains(old_)) {
+            pastReservations.remove(old_);
+            pastReservations.add(new_);
         }
         mainGuiWindow.refresh();
     }
 
     public void checkIn(Reservation reservation) {
-        removeReservation(reservations, reservation, "reservations");
-        addToArray(inHouse, reservation, "inHouse");
+        reservations.remove(reservation);
+        inHouse.add(reservation);
         mainGuiWindow.refresh();
     }
 
     public void checkOut(Reservation reservation) {
-        for (Reservation r : inHouse) {
-            if (r.equals(reservation))
-                checkOutUpdate(reservation);
-        }
+        inHouse.remove(reservation);
+        pastReservations.add(reservation);
         mainGuiWindow.refresh();
-    }
-
-    public void checkOutUpdate(Reservation r) {
-
-        removeReservation(inHouse, r, "inHouse");
-        addToArray(pastReservations, r, "pastReservations");
     }
 
     public ArrayList<Reservation> getDeparturesForToday() {
@@ -95,73 +83,50 @@ public class Model {
 
 
     public Reservation[] getReservations() {
-        return reservations;
+        return listToArr(reservations);
     }
 
     public void setReservations(Reservation[] reservations) {
-        this.reservations = reservations;
+        this.reservations = new LinkedList<>();
+        for (Reservation r : reservations) {
+            this.reservations.add(r);
+        }
     }
 
     public Reservation[] getInHouse() {
-        return inHouse;
+        return listToArr(inHouse);
     }
 
     public void setInHouse(Reservation[] inHouse) {
-        this.inHouse = inHouse;
+        this.inHouse = new LinkedList<>();
+        for (Reservation r : inHouse) {
+            this.inHouse.add(r);
+        }
     }
 
     public Reservation[] getPastReservations() {
-        return pastReservations;
+        return listToArr(pastReservations);
     }
 
     public void setPastReservations(Reservation[] pastReservations) {
-        this.pastReservations = pastReservations;
+        this.pastReservations = new LinkedList<>();
+        for (Reservation r : pastReservations) {
+            this.pastReservations.add(r);
+        }
     }
 
-    public void removeReservation(Reservation[] arr, Reservation r, String name) {
-        Reservation[] collect = new Reservation[arr.length - 1];
+    private Reservation[] listToArr(LinkedList<Reservation> list) {
+        if(list == null) {
+            return null;
+        }
+        Reservation[] arr = new Reservation[list.size()];
         int count = 0;
-        for (int i = 0; i < arr.length; i++) {
-            if (!arr[i].equals(r)) {
-                collect[count] = arr[i];
-                count++;
-            }
+        for (Reservation r : list) {
+            arr[count] = r;
+            count++;
         }
-
-        if (name.equals("inHouse")) {
-            inHouse = collect;
-        } else if (name.equals("pastReservations")) {
-            pastReservations = collect;
-        } else {
-            reservations = collect;
-        }
-
-    }
-
-    public int indexOf(Reservation[] arr, Reservation r) {
-
-        for (int i = 0; i < arr.length; i++) {
-            if (r.equals(arr[i]))
-                return i;
-
-        }
-
-        return -1;
-    }
-
-    public void addToArray(Reservation[] arr, Reservation r, String name) {
-        Reservation[] a = new Reservation[arr.length + 1];
-        for (int i = 0; i < arr.length; i++) {
-            a[i] = arr[i];
-        }
-        a[a.length - 1] = r;
-        if (name.equals("inHouse")) {
-            inHouse = a;
-        } else if (name.equals("pastReservations")) {
-            pastReservations = a;
-        } else {
-            reservations = a;
-        }
+        System.out.println(Arrays.toString(arr));
+        return arr;
     }
 
 }
