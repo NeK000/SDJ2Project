@@ -127,7 +127,7 @@ public class MainGuiWindow {
             e.printStackTrace();
         }
 
-        checkAvailability = new CheckAvailability(hc);
+        checkAvailability = new CheckAvailability(tabPane, hc);
         createReservationWindowGUI = new CreateReservationWindowGUI(tabPane, hc);
         search = new Search(tabPane, hc);
         checkInGUI = new CheckInGUI(tabPane, hc);

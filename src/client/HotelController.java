@@ -189,7 +189,7 @@ public class HotelController implements Serializable {
         Reservation[] compareInHouseReservations = model.getInHouse();
         compare.addAll(Arrays.asList(compareFutureReservations));
         compare.addAll(Arrays.asList(compareInHouseReservations));
-
+        System.out.println(compare);
         for (int i = 0; i < compare.size(); i++) {
             if (!(compare.get(i).getDeparture().getCheckOutDate().isBefore(arrival))
                     && (compare.get(i).getArrival().getCheckInDate().isBefore(departure))) {

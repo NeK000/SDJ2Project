@@ -19,7 +19,7 @@ public class CheckAvailability {
     private HotelController hc;
 
     private JPanel controlPanel;
-
+    private JTabbedPane parent;
     private JPanel left;
     private JPanel right;
     private JTextField fromField;
@@ -33,8 +33,9 @@ public class CheckAvailability {
     /**
      * No-argument constructor for initialing CheckAvailability
      */
-    public CheckAvailability(HotelController hc) {
+    public CheckAvailability(JTabbedPane parent, HotelController hc) {
         this.hc = hc;
+        this.parent = parent;
         prepareGUI();
     }
 
@@ -74,8 +75,8 @@ public class CheckAvailability {
         toField = new JTextField();
         toField.setPreferredSize(new Dimension(100, 25));
         // toDo ( Yusuf ) I commented below code. Don't ask why.
-//        toField.addKeyListener(new KeyPressEvent());
-//        fromField.addKeyListener(new KeyPressEvent());
+        toField.addKeyListener(new KeyPressEvent());
+        fromField.addKeyListener(new KeyPressEvent());
 
         label = new JLabel("Arrival and Departure dates (dd/mm/YYYY) ");
         label.setLabelFor(toField);
@@ -95,85 +96,85 @@ public class CheckAvailability {
 
     /**
      * The method takes two date handlers and executes the getAvailabilityFromDate using them and displaying the resulting String s in the roomData JTextArea
+     *
      * @param d1 DateHandler object representing arrival date
      * @param d2 DateHandler object representing departure date
      */
 
     // toDo ( Yusuf ) I commented below code. Don't ask why.
+    private void displayRooms(DateHandler d1, DateHandler d2) {
 
-//    private void displayRooms(DateHandler d1, DateHandler d2) {
-//
-//        String s = hm.getAvailabilityFromDateInterval(d1, d2);
-//        roomData.setText(s);
-//        roomData.revalidate();
-//    }
+        String s = hc.getAvailabilityFromDateInterval(d1, d2);
+        roomData.setText(s);
+        roomData.revalidate();
+    }
 
     /**
      * A class that listens to any activity regarding the keyboard
      */
-//    class KeyPressEvent implements KeyListener {
-//        public void keyTyped(KeyEvent e) {
-//        }
-//
-//        /**
-//         * A method to listen for key presses.
-//         *
-//         * @param e event representing the action event.
-//         */
-//        public void keyPressed(KeyEvent e) {
-//            if ((e.getSource().equals(toField) || e.getSource().equals(fromField)) && e.getKeyCode() == 10) {
-//                String[] str = fromField.getText().split("/");
-//                String[] str2 = toField.getText().split("/");
-//                error = true;
-//                if (!(isValidDate(fromField.getText()) && isValidDate(toField.getText()))) {
-//                    warnings.setText("Please use the format provided");
-//                    error = false;
-//                } else {
-//                    DateHandler d1 = new DateHandler(Integer.parseInt(str[0]), Integer.parseInt(str[1]), Integer.parseInt(str[2]));
-//                    DateHandler d2 = new DateHandler(Integer.parseInt(str2[0]), Integer.parseInt(str2[1]), Integer.parseInt(str2[2]));
-//                    if (d1.isBefore(d2)) {
-//                        displayRooms(d1, d2);
-//                    } else {
-//                        error = false;
-//
-//                        warnings.setText("Departure is before Arrival");
-//                        roomData.setText("Single room: " + 0 + "\nDouble room: " + 0
-//                                + "\nDouble room-twin bed: " + 0 + "\nDouble room-kingsize bed: "
-//                                + 0 + "\nSingle suite: " + 0 + "\nDouble suite: "
-//                                + 0 + "\nTriple Suite: " + 0);
-//                    }
-//                }
-//                if (error) {
-//                    warnings.setText("");
-//                }
-//
-//            }
-//        }
-//
-//        /**
-//         * Checks if the entered dates are in the correct format.
-//         *
-//         * @param str takes the date as a string
-//         * @return true or false. If dates are entered in the proper way, the method returns true , else it returns false.
-//         */
-//
-//        public boolean isValidDate(String str) {
-//            String[] arr = str.split("/");
-//            if (arr[0].chars().allMatch(Character::isDigit) && arr[0].length() == 2) {
-//                if (arr[1].chars().allMatch(Character::isDigit) && arr[1].length() == 2) {
-//                    if (arr[2].chars().allMatch(Character::isDigit) && arr[2].length() == 4) {
-//                        return true;
-//                    }
-//                }
-//            }
-//            return false;
-//        }
-//
-//        public void keyReleased(KeyEvent e) {
-//
-//        }
-//    }
-//
+    class KeyPressEvent implements KeyListener {
+        public void keyTyped(KeyEvent e) {
+        }
+
+        /**
+         * A method to listen for key presses.
+         *
+         * @param e event representing the action event.
+         */
+        public void keyPressed(KeyEvent e) {
+            if ((e.getSource().equals(toField) || e.getSource().equals(fromField)) && e.getKeyCode() == 10) {
+                String[] str = fromField.getText().split("/");
+                String[] str2 = toField.getText().split("/");
+                error = true;
+                if (!(isValidDate(fromField.getText()) && isValidDate(toField.getText()))) {
+                    warnings.setText("Please use the format provided");
+                    error = false;
+                } else {
+                    DateHandler d1 = new DateHandler(Integer.parseInt(str[0]), Integer.parseInt(str[1]), Integer.parseInt(str[2]));
+                    DateHandler d2 = new DateHandler(Integer.parseInt(str2[0]), Integer.parseInt(str2[1]), Integer.parseInt(str2[2]));
+                    if (d1.isBefore(d2)) {
+                        displayRooms(d1, d2);
+                    } else {
+                        error = false;
+
+                        warnings.setText("Departure is before Arrival");
+                        roomData.setText("Single room: " + 0 + "\nDouble room: " + 0
+                                + "\nDouble room-twin bed: " + 0 + "\nDouble room-kingsize bed: "
+                                + 0 + "\nSingle suite: " + 0 + "\nDouble suite: "
+                                + 0 + "\nTriple Suite: " + 0);
+                    }
+                }
+                if (error) {
+                    warnings.setText("");
+                }
+
+            }
+        }
+
+        /**
+         * Checks if the entered dates are in the correct format.
+         *
+         * @param str takes the date as a string
+         * @return true or false. If dates are entered in the proper way, the method returns true , else it returns false.
+         */
+
+        public boolean isValidDate(String str) {
+            String[] arr = str.split("/");
+            if (arr[0].chars().allMatch(Character::isDigit) && arr[0].length() == 2) {
+                if (arr[1].chars().allMatch(Character::isDigit) && arr[1].length() == 2) {
+                    if (arr[2].chars().allMatch(Character::isDigit) && arr[2].length() == 4) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public void keyReleased(KeyEvent e) {
+
+        }
+    }
+
     /**
      * A method that returns the controlPanel of this class as a JPanel.
      *
