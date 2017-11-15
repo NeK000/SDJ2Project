@@ -1,5 +1,6 @@
-package client;
+package client.GUI;
 
+import client.HotelController;
 import common.DateHandler;
 
 import javax.swing.*;

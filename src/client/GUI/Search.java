@@ -1,4 +1,7 @@
-package client;
+package client.GUI;
+
+import client.GUI.CreateReservationWindowGUI;
+import client.HotelController;
 
 import javax.swing.*;
 

@@ -1,5 +1,6 @@
-package client;
+package client.GUI;
 
+import client.HotelController;
 import common.*;
 
 import javax.imageio.ImageIO;
@@ -24,7 +25,6 @@ import java.util.Arrays;
 
 
 public class MainGuiWindow {
-//    private FileAdapter adapter = new FileAdapter();
 
     private HotelController hc;
 
@@ -40,7 +40,6 @@ public class MainGuiWindow {
     private JPanel searchPanelRight;
     private JPanel logo = new JPanel();
 
-    // inHouse Guests
     private DefaultTableModel dtmIHG;
     private String[] titlesIHG;
     private JPanel bottom = new JPanel();
@@ -66,7 +65,6 @@ public class MainGuiWindow {
     private JButton rightButton;
     private JButton leftButton;
 
-    // The Searches
     private arrSearch arrPresser;
     private depSearch depPresser;
 
@@ -322,7 +320,7 @@ public class MainGuiWindow {
         mainPanel.add(right, BorderLayout.EAST);
         mainPanel.add(logo, BorderLayout.CENTER);
 
-        // Add Main panel to Tab
+        // Add MainServer panel to Tab
         tabPane.addTab("Home", mainPanel);
 
         mainWindow.add(tabPane);

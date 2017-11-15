@@ -1,6 +1,8 @@
 package client;
 
-public class Entry {
+import client.GUI.MainGuiWindow;
+
+public class MainClient {
 
     public static void main(String[] args) {
         new MainGuiWindow();

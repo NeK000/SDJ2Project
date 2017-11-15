@@ -1,5 +1,6 @@
-package client;
+package client.GUI;
 
+import client.HotelController;
 import common.*;
 
 import javax.swing.*;
@@ -46,7 +47,6 @@ public class CreateReservationWindowGUI {
     private ArrayList<Reservation> foundNames;
     private MyListSelectionListener tableSelect;
     private Reservation chosenReservation;
-    //    private FileAdapter fa = new FileAdapter();
     private boolean isSearch = false;
     private JTabbedPane parent;
 
@@ -59,8 +59,7 @@ public class CreateReservationWindowGUI {
     public CreateReservationWindowGUI(JTabbedPane parent, HotelController hc) {
 
         this.hc = hc;
-        System.out.println(this.getClass().getName().toString());
-        if (this.getClass().getName().equals("client.Search")) {
+        if (this.getClass().getName().equals("client.GUI.Search")) {
             isSearch = true;
         }
 
@@ -475,10 +474,10 @@ public class CreateReservationWindowGUI {
         allReservations = new ArrayList<>();
 
         temp.addAll(reservations);
+        temp.addAll(inHouse);
 
         if (!isSearch) {
             temp.addAll(pastReservation);
-            temp.addAll(inHouse);
         }
 
         for (int i = 0; i < temp.size(); i++) {

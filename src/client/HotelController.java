@@ -1,5 +1,6 @@
 package client;
 
+import client.GUI.MainGuiWindow;
 import common.DateHandler;
 import common.Price;
 import common.Request;

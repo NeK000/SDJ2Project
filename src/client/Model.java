@@ -1,11 +1,11 @@
 package client;
 
+import client.GUI.MainGuiWindow;
 import client.linkedList.LinkedList;
 import common.DateHandler;
 import common.Reservation;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 //ToDO  :  the model should trigger an update to the GUI each time a update is made

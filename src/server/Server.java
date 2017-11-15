@@ -44,7 +44,7 @@ public class Server implements OurObservable {
         fileAdapter.updateReservation(old, newOne);
     }
 
-    private void startServer() {
+    public void startServer() {
         System.out.println("Server starting ...");
         while (true) {
             try {
@@ -100,8 +100,5 @@ public class Server implements OurObservable {
         return fileAdapter.getPast();
     }
 
-    public static void main(String[] args) {
-        Server newServer = new Server();
-        newServer.startServer();
-    }
+
 }

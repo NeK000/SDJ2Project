@@ -12,7 +12,7 @@ import java.util.*;
 
 public class FakeGuest {
     private String[] streets = {"Creek Road", "Summit Street", "River Road", "Hudson Street", "Lafayette Street",
-            "Ridge Street", "Cardinal Drive", "Heritage Drive", "Oak Street", "Main Street South", "4th Street",
+            "Ridge Street", "Cardinal Drive", "Heritage Drive", "Oak Street", "MainServer Street South", "4th Street",
             "Myrtle Avenue", "Strawberry Lane", "Monroe Drive", "Arlington Avenue", "Hanover Court", "Pin Oak Drive",
             "Windsor Drive", "Essex Court", "4th Street North", "Spruce Street", "Roberts Road", "High Street",
             "Hawthorne Lane", "Creekside Drive", "4th Street West", "Bay Street", "9th Street", "Hillside Drive",
