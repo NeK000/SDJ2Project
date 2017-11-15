@@ -65,6 +65,7 @@ public class MainGuiWindow {
     private JButton rightButton;
     private JButton leftButton;
 
+    // The Searches
     private arrSearch arrPresser;
     private depSearch depPresser;
 

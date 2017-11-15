@@ -33,9 +33,6 @@ public class HotelController implements Serializable {
         client = new Client("localhost", 6789);
     }
 
-    public double getTotalPrice(Reservation r, String something) {
-        return 0.0;
-    }
 
     public double getTotalPrice(Reservation r) {
         Calendar cal = new GregorianCalendar(r.getArrival().getCheckInDate().getYear(),
@@ -272,6 +269,23 @@ public class HotelController implements Serializable {
                 + kingSizeRoom + "\nSingle suite: " + countSingleBedroomSuite + "\nDouble suite: "
                 + countTwoBedroomSuite + "\nTriple Suite: " + countThreeBedroomSuite;
         return str;
+    }
+
+    public ArrayList<Reservation> getReservationsForDateInterval(DateHandler arrival, DateHandler departure) {
+        ArrayList<Reservation> temp = new ArrayList<>();
+        ArrayList<Reservation> compare = new ArrayList<>();
+        Reservation[] compareFutureReservations = model.getReservations();
+        Reservation[] compareInHouseReservations = model.getInHouse();
+        compare.addAll(Arrays.asList(compareFutureReservations));
+        compare.addAll(Arrays.asList(compareInHouseReservations));
+        System.out.println(compare);
+        for (int i = 0; i < compare.size(); i++) {
+            if (!(compare.get(i).getDeparture().getCheckOutDate().isBefore(arrival))
+                    && (compare.get(i).getArrival().getCheckInDate().isBefore(departure))) {
+                temp.add(compare.get(i));
+            }
+        }
+        return temp;
     }
 
     public ArrayList<Reservation> getArrivalsForToday() {

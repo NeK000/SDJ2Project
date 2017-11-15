@@ -2,8 +2,11 @@ package client.GUI;
 
 import client.HotelController;
 import common.DateHandler;
+import common.Reservation;
+import javafx.scene.layout.BorderPane;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -11,6 +14,8 @@ import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * @author Catalin Udrea
@@ -23,13 +28,16 @@ public class CheckAvailability {
     private JTabbedPane parent;
     private JPanel left;
     private JPanel right;
+    private JPanel down;
     private JTextField fromField;
     private JTextField toField;
     private JTextArea roomData;
     private JTextPane warnings;
     private JLabel label;
     private boolean error;
-
+    private String[] titles = {"First name", "Middle name ", "Last name", "Country", "Arrival date", "Departure date", "Room type"};
+    private DefaultTableModel dtm = new DefaultTableModel(titles, 0);
+    private JTable roomDataWithReservations = new JTable(dtm);
 
     /**
      * No-argument constructor for initialing CheckAvailability
@@ -47,14 +55,18 @@ public class CheckAvailability {
 
         left = new JPanel();
         right = new JPanel();
-        right.setPreferredSize(new Dimension(700, 860));
-        left.setPreferredSize(new Dimension(700, 860));
-        controlPanel = new JPanel();
-        controlPanel.setLayout(new FlowLayout());
+        down = new JPanel();
 
-        controlPanel.add(left);
-        controlPanel.add(right);
+        right.setPreferredSize(new Dimension(700, 400));
+        left.setPreferredSize(new Dimension(700, 400));
+        down.setPreferredSize(new Dimension(1350, 400));
+        controlPanel = new JPanel();
+        controlPanel.setLayout(new BorderLayout());
+
         prepareSearchWindow();
+        controlPanel.add(left, BorderLayout.WEST);
+        controlPanel.add(right, BorderLayout.EAST);
+        controlPanel.add(down, BorderLayout.SOUTH);
     }
 
     /**
@@ -62,13 +74,15 @@ public class CheckAvailability {
      */
     private void prepareSearchWindow() {
 
-
         roomData = new JTextArea(hc.getAvailabilityFromDateInterval(new DateHandler(1, 1, 2200),
                 new DateHandler(1, 2, 2200)));
         JScrollPane listScroller = new JScrollPane(roomData);
         listScroller.setPreferredSize(new Dimension(700, 400));
         roomData.setEditable(false);
+        JScrollPane listWithReservations = new JScrollPane(roomDataWithReservations);
+        listWithReservations.setPreferredSize(new Dimension(1300, 390));
         right.add(listScroller);
+        down.add(listWithReservations);
 
         fromField = new JTextField();
         fromField.setPreferredSize(new Dimension(100, 25));
@@ -107,7 +121,26 @@ public class CheckAvailability {
 
         String s = hc.getAvailabilityFromDateInterval(d1, d2);
         roomData.setText(s);
+        takeData(d1, d2);
         roomData.revalidate();
+    }
+
+    private void takeData(DateHandler d1, DateHandler d2) {
+        ArrayList<Reservation> newRes = hc.getReservationsForDateInterval(d1, d2);
+        Object[][] array = new Object[newRes.size()][7];
+        for (int i = 0; i < newRes.size(); i++) {
+            array[i][0] = newRes.get(i).getGuest().getName().getFirstName();
+            array[i][1] = newRes.get(i).getGuest().getName().getMiddleName();
+            array[i][2] = newRes.get(i).getGuest().getName().getLastName();
+            array[i][3] = newRes.get(i).getGuest().getAddress().getCountry();
+            array[i][4] = newRes.get(i).getArrival().getCheckInDate();
+            array[i][5] = newRes.get(i).getDeparture().getCheckOutDate();
+            array[i][6] = newRes.get(i).getRoomType();
+
+        }
+        dtm = new DefaultTableModel(array, titles);
+        roomDataWithReservations.setModel(dtm);
+
     }
 
     /**
