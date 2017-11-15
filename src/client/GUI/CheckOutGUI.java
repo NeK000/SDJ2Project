@@ -153,6 +153,11 @@ public class CheckOutGUI {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == checkOutButton) {
                 hc.checkOut(reservation);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
                 parent.setSelectedIndex(0);
             }
             if (e.getSource() == cancel) {

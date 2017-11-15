@@ -151,6 +151,11 @@ public class CheckInGUI {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == checkIn) {
                 hc.checkIn(res, (int) roomNumberField.getSelectedItem());
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
                 parent.setSelectedIndex(0);
 
             }

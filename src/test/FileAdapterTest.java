@@ -1,8 +1,4 @@
-/**
- * Test class for the fileadapter.
- *
- * @author MES
- */
+
 package test;
 
 import static org.junit.Assert.*;
