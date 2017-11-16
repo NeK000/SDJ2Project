@@ -4,15 +4,12 @@ import common.Reservation;
 import common.Response;
 
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 
 public class Server implements OurObservable {
     private ServerSocket serverSocket;
     private final int PORT = 6789;
-    //    ToDo: verify if fileAdapter works as static
     private static IFileAdapter fileAdapter;
 
     public static ArrayList<OurObserver> clientList;
@@ -32,9 +29,7 @@ public class Server implements OurObservable {
         fileAdapter.createReservation(reservation);
         try {
             updateAll(new Response("create reservation", reservation));
-        } catch (IOException e) {
-            //Do nothing
-        }
+        } catch (IOException e) {}
     }
 
     public synchronized static ArrayList<Reservation> getAll() {
@@ -46,9 +41,7 @@ public class Server implements OurObservable {
         Reservation[] ar = {old, newOne};
         try {
             updateAll(new Response("update reservation", ar));
-        } catch (IOException e) {
-            //Do nothing
-        }
+        } catch (IOException e) {}
     }
 
     public void startServer() {
@@ -65,15 +58,14 @@ public class Server implements OurObservable {
         }
     }
 
-
     @Override
     public void addObserver(OurObserver addClient) {
         clientList.add(addClient);
     }
 
     @Override
-    public void removeObserver(OurObserver oldCLient) {
-        clientList.remove(oldCLient);
+    public void removeObserver(OurObserver oldClient) {
+        clientList.remove(oldClient);
     }
 
     @Override
@@ -82,14 +74,6 @@ public class Server implements OurObservable {
             item.update(resp);
         }
     }
-
-
-    public void updateAll(Reservation old, Reservation newOne) throws IOException {
-        Reservation[] res = {old, newOne};
-        System.out.println("Sending updates");
-        updateAll(new Response("update reservation", res));
-    }
-
 
     public synchronized void addToInHouse(Reservation reservation, Reservation newForCheckIn) throws IOException {
         fileAdapter.checkIn(reservation, newForCheckIn);
@@ -110,6 +94,5 @@ public class Server implements OurObservable {
     public static ArrayList<Reservation> getPastReservations() {
         return fileAdapter.getPast();
     }
-
 
 }

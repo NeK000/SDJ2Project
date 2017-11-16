@@ -11,12 +11,10 @@ import java.net.Socket;
 
 public class Connection implements Runnable, OurObserver {
     private Server server;
-    private Socket socket;
     private ObjectInputStream inFromClient;
     private ObjectOutputStream outToClient;
 
     public Connection(Socket socket, Server server) {
-        this.socket = socket;
         this.server = server;
         try {
             inFromClient = new ObjectInputStream(socket.getInputStream());
@@ -36,18 +34,6 @@ public class Connection implements Runnable, OurObserver {
             } catch (Exception e) {
                 server.removeObserver(this);
             }
-
-//            if (newRequest.getType().equals("INSERT")) {
-//                System.out.println("Inserting into database");
-//                for (Runnable asd : Server.clientList) {
-//                    Connection c = (Connection) asd;
-//                    try {
-//                        c.getOutputStream().writeObject(new Response("Fuck you", null));
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
             if (newRequest.getType().equalsIgnoreCase("create reservation")) {
                 server.createReservation(newRequest.getParameter());
 
@@ -64,7 +50,6 @@ public class Connection implements Runnable, OurObserver {
             if (newRequest.getType().equalsIgnoreCase("Update reservation")) {
                 try {
                     server.updateReservation(newRequest.getReservations()[0], newRequest.getReservations()[1]);
-                    //   updateAll(newRequest.getReservations()[0], newRequest.getReservations()[1]);
 
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
@@ -109,13 +94,7 @@ public class Connection implements Runnable, OurObserver {
         return outToClient;
     }
 
-    public void updateAll(Reservation old, Reservation newOne) throws IOException {
-        server.updateAll(old, newOne);
-    }
-
-
     public void updateOnInHouse(Reservation reservation, Reservation forCheckIn) throws IOException {
-
         server.addToInHouse(reservation, forCheckIn);
     }
 
@@ -124,18 +103,14 @@ public class Connection implements Runnable, OurObserver {
     }
 
     public void writeObject(Response response) {
-        Thread check = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    getOutputStream().writeObject(response);
-                } catch (IOException e) {
-                    server.removeObserver(getMe());
-                }
-
+        new Thread(() -> {
+            try {
+                getOutputStream().writeObject(response);
+            } catch (IOException e) {
+                server.removeObserver(getMe());
             }
-        });
-        check.start();
+
+        }).start();
     }
 
     @Override
