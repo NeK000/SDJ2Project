@@ -41,8 +41,14 @@ public class Server implements OurObservable {
         return fileAdapter.getAll();
     }
 
-    public synchronized static void updateReservation(Reservation old, Reservation newOne) {
+    public synchronized  void updateReservation(Reservation old, Reservation newOne) {
         fileAdapter.updateReservation(old, newOne);
+        Reservation[] ar = {old, newOne};
+        try {
+            updateAll(new Response("update reservation", ar));
+        } catch (IOException e) {
+            //Do nothing
+        }
     }
 
     public void startServer() {
@@ -77,21 +83,21 @@ public class Server implements OurObservable {
         }
     }
 
-    @Override
+
     public void updateAll(Reservation old, Reservation newOne) throws IOException {
         Reservation[] res = {old, newOne};
         System.out.println("Sending updates");
         updateAll(new Response("update reservation", res));
     }
 
-    @Override
+
     public synchronized void addToInHouse(Reservation reservation, Reservation newForCheckIn) throws IOException {
         fileAdapter.checkIn(reservation, newForCheckIn);
         Reservation[] reservations = {reservation, newForCheckIn};
         updateAll(new Response("checkin", reservations));
     }
 
-    @Override
+
     public void addToPastReservations(Reservation reservation) throws IOException {
         fileAdapter.checkOut(reservation);
         updateAll(new Response("checkout", reservation));

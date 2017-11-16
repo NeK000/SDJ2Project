@@ -63,8 +63,8 @@ public class Connection implements Runnable, OurObserver {
             }
             if (newRequest.getType().equalsIgnoreCase("Update reservation")) {
                 try {
-                    Server.updateReservation(newRequest.getReservations()[0], newRequest.getReservations()[1]);
-                    updateAll(newRequest.getReservations()[0], newRequest.getReservations()[1]);
+                    server.updateReservation(newRequest.getReservations()[0], newRequest.getReservations()[1]);
+                    //   updateAll(newRequest.getReservations()[0], newRequest.getReservations()[1]);
 
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
@@ -109,14 +109,11 @@ public class Connection implements Runnable, OurObserver {
         return outToClient;
     }
 
-
-    @Override
     public void updateAll(Reservation old, Reservation newOne) throws IOException {
         server.updateAll(old, newOne);
     }
 
 
-    @Override
     public void updateOnInHouse(Reservation reservation, Reservation forCheckIn) throws IOException {
 
         server.addToInHouse(reservation, forCheckIn);
@@ -126,7 +123,6 @@ public class Connection implements Runnable, OurObserver {
         return this;
     }
 
-    @Override
     public void writeObject(Response response) {
         Thread check = new Thread(new Runnable() {
             @Override
