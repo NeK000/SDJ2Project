@@ -2,14 +2,6 @@ package common;
 
 import java.util.*;
 
-/**
- * The common.FakeGuest class generates fake data for The common.Reservation class
- *
- * @author  Catalin Udrea
- * @version 1.0
- * @since   2017-05-17
- */
-
 public class FakeGuest {
     private String[] streets = {"Creek Road", "Summit Street", "River Road", "Hudson Street", "Lafayette Street",
             "Ridge Street", "Cardinal Drive", "Heritage Drive", "Oak Street", "MainServer Street South", "4th Street",

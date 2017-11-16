@@ -2,12 +2,6 @@ package common;
 
 import java.io.Serializable;
 
-/**
- * A class containing attributes that create an address which later on will be used to create a reservation.
- * @author Nikolay D Nikolov
- * @version 1.0
- */
-
 public class Address implements Serializable {
     private String country;
     private String city;

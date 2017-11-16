@@ -2,11 +2,6 @@ package common;
 
 import java.io.Serializable;
 
-/**
- * A class containing guest which later on will be used to create a reservation.
- * @author Yusuf A Farah
- * @version 1.0
- */
 public class Guest implements Serializable {
 
     private Name name;

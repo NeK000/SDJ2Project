@@ -2,11 +2,6 @@ package common;
 
 import java.io.Serializable;
 
-/**
- * A class containing check out date which later on will be used to create a reservation.
- * @author Catalin Udrea
- * @version 1.0
- */
 public class Departure implements Serializable {
     private DateHandler checkOutDate;
     /**

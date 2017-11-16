@@ -15,9 +15,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
-/**
- * @author Catalin Udrea
- */
 public class CheckAvailability {
 
     private HotelController hc;

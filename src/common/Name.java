@@ -2,13 +2,6 @@ package common;
 
 import java.io.Serializable;
 
-/**
- * A class containing names which later on will be used to create a reservation.
- *
- * @author Nikolay D Nikolov
- * @version 1.0
- */
-
 public class Name implements Serializable {
     private String firstName;
     private String middleName;

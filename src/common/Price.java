@@ -2,11 +2,6 @@ package common;
 
 import java.io.Serializable;
 
-/**
- * A class containing price which later on will be used by the client.HotelController class in order to completed checkOut method and set master prices.
- * @author Radu G Orleanu
- * @version 1.0
- */
 public class Price implements Serializable {
 
     private double singleRoom;

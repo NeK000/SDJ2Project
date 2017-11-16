@@ -5,10 +5,9 @@ import common.Response;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.net.Socket;
 
-public class Client implements Serializable {
+public class Client {
 
     private Socket clientSocket;
     private ObjectInputStream in;

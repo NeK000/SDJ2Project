@@ -6,20 +6,12 @@ import common.Price;
 import common.Request;
 import common.Reservation;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-/**
- * A class containing methods which later on will be used from our GUI.
- *
- * @author Nikolay D Nikolav, Yusuf A Farah, Radu G Orleanu, Catalin Udrea
- * @version 1.0
- */
-
-public class HotelController implements Serializable {
+public class HotelController {
 
     private Model model;
     private Client client;

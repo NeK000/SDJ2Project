@@ -15,12 +15,6 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/**
- * A class for creating the Create Reservation tab in the GUI.
- *
- * @author Nikolay D Nikolov, Radu G Orleanu
- * @version 1.0
- */
 public class CreateReservationWindowGUI {
 
     private HotelController hc;

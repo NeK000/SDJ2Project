@@ -11,13 +11,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
-/**
- * A class containing the GUI for check out.
- *
- * @author Nikolay D Nikolov
- * @version 1.0
- */
-
 public class CheckOutGUI {
 
     private JPanel mainPanelForFields, mainPanelForLabels, leftPanel;

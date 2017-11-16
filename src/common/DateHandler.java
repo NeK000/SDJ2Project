@@ -6,11 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-/**
- * A class containing dates which later on will be used to create a different date objects.
- * @author Catalin Udrea
- * @version 1.0
- */
 public class DateHandler implements Serializable {
 
     private int day;

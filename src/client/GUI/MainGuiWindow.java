@@ -16,15 +16,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/**
- * This class holds the JFrame (the window)  of the GUI and also the JTabbedPane.
- * It also holds the default GUI tab named "Home". All other tabs are instantiated here.
- *
- * @author Yusuf A Farah, Catalin Udrea
- * @version 1.0
- */
-
-
 public class MainGuiWindow {
 
     private HotelController hc;
