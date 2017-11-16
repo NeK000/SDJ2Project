@@ -33,10 +33,8 @@ public class Connection implements Runnable, OurObserver {
             try {
                 Object temp = inFromClient.readObject();
                 newRequest = (Request) temp;
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                server.removeObserver(this);
             }
 
 //            if (newRequest.getType().equals("INSERT")) {
@@ -124,13 +122,24 @@ public class Connection implements Runnable, OurObserver {
         server.addToInHouse(reservation, forCheckIn);
     }
 
+    private OurObserver getMe() {
+        return this;
+    }
+
     @Override
     public void writeObject(Response response) {
-        try {
-            getOutputStream().writeObject(response);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Thread check = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    getOutputStream().writeObject(response);
+                } catch (IOException e) {
+                    server.removeObserver(getMe());
+                }
+
+            }
+        });
+        check.start();
     }
 
     @Override

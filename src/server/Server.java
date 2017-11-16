@@ -4,6 +4,7 @@ import common.Reservation;
 import common.Response;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class Server implements OurObservable {
         try {
             updateAll(new Response("create reservation", reservation));
         } catch (IOException e) {
-            e.printStackTrace();
+            //Do nothing
         }
     }
 
@@ -60,10 +61,14 @@ public class Server implements OurObservable {
 
 
     @Override
-    public void addObserver(Connection addClient) {
+    public void addObserver(OurObserver addClient) {
         clientList.add(addClient);
     }
 
+    @Override
+    public void removeObserver(OurObserver oldCLient) {
+        clientList.remove(oldCLient);
+    }
 
     @Override
     public void updateAll(Response resp) throws IOException {
