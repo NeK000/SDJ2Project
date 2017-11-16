@@ -1,7 +1,7 @@
 package client.GUI;
 
 import client.HotelController;
-import common.*;
+import common.Reservation;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,16 +10,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/**
- * A class containing the GUI for check in.
- *
- * @author Radu G Orleanu, Yusuf A Farah
- * @version 1.0
- */
-
 public class CheckInGUI {
     private HotelController hc;
-
     private JPanel mainPanelForFields, mainPanelForLabels, leftPanel;
     private JLabel firstName, middleName, lastName, country, city, postCode, street,
             phoneNumber, nationality, dateOfBirth, arrival, departure, roomType, roomNumberLabel;
@@ -38,15 +30,12 @@ public class CheckInGUI {
      */
 
     public CheckInGUI(JTabbedPane parent, HotelController hc) {
-
         this.hc = hc;
         this.parent = parent;
         allJLabelsForFields = new ArrayList<>();
         allJLabelsForLabels = new ArrayList<>();
         listener = new MyButtonListener();
-
         designGUI();
-
     }
 
     /**
@@ -60,7 +49,6 @@ public class CheckInGUI {
 
         mainPanelForFields = new JPanel(new GridLayout(15, 1, 2, 2));
         mainPanelForFields.setPreferredSize(new Dimension(200, 700));
-
 
         mainPanelForLabels = new JPanel(new GridLayout(15, 1, 2, 2));
         mainPanelForLabels.setPreferredSize(new Dimension(100, 700));
@@ -139,7 +127,6 @@ public class CheckInGUI {
         arrival.setText(String.valueOf(res.getArrival().getCheckInDate()));
         departure.setText(String.valueOf(res.getDeparture().getCheckOutDate()));
         roomType.setText(String.valueOf(res.getRoomType()));
-
     }
 
 

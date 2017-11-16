@@ -40,11 +40,6 @@ public class Client implements Serializable {
 
         if (in == null) {
             new Thread(() -> {
-//
-
-                // TODO MODEL IS PASSED AS NULL -- solved
-
-
                 try {
                     in = new ObjectInputStream(clientSocket.getInputStream());
                     while (true) {
@@ -95,22 +90,5 @@ public class Client implements Serializable {
                 }
             }).start();
         }
-    }
-
-    public void receiveResponse() {
-        Response response;
-
-        try {
-            while (true) {
-                in = new ObjectInputStream(clientSocket.getInputStream());
-                response = (Response) in.readObject();
-                System.out.println(response.toString());
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
     }
 }

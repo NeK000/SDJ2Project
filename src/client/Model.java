@@ -7,8 +7,6 @@ import common.Reservation;
 
 import java.util.ArrayList;
 
-
-//ToDO  :  the model should trigger an update to the GUI each time a update is made
 public class Model {
 
     private LinkedList<Reservation> reservations;

@@ -1,6 +1,5 @@
 package client.GUI;
 
-import client.GUI.CreateReservationWindowGUI;
 import client.HotelController;
 
 import javax.swing.*;
@@ -12,7 +11,7 @@ import javax.swing.*;
  */
 public class Search extends CreateReservationWindowGUI {
 
-    public Search (JTabbedPane parent, HotelController hc) {
+    public Search(JTabbedPane parent, HotelController hc) {
         super(parent, hc);
     }
 

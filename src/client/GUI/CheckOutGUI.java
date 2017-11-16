@@ -1,7 +1,7 @@
 package client.GUI;
 
 import client.HotelController;
-import common.*;
+import common.Reservation;
 
 import javax.swing.*;
 import java.awt.*;
@@ -112,15 +112,12 @@ public class CheckOutGUI {
             mainPanelForLabels.add(allJLabelsForLabels.get(i));
         }
 
-
         leftPanel.add(mainPanelForLabels, BorderLayout.WEST);
         leftPanel.add(mainPanelForFields, BorderLayout.EAST);
         leftPanel.add(new JLabel("Discount"), BorderLayout.WEST);
         leftPanel.add(discountField);
         leftPanel.add(checkOutButton);
         leftPanel.add(cancel);
-
-
     }
 
     /**
@@ -143,7 +140,6 @@ public class CheckOutGUI {
         roomType.setText(String.valueOf(reservation.getRoomType()));
         roomNumber.setText(String.valueOf(reservation.getRoomNumber()));
         price.setText(String.valueOf(hc.getTotalPrice(reservation)));
-
     }
 
     /**
@@ -187,9 +183,6 @@ public class CheckOutGUI {
          * @param e event representing the action event.
          */
         public void keyReleased(KeyEvent e) {
-
-            // toDo: this was changed, check the original, it was just a quick workaround
-
             if (isValidNumber(discountField.getText())) {
                 double discount = Double.parseDouble(discountField.getText());
                 if (discount >= 0 && discount <= 100) {

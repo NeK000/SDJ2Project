@@ -23,21 +23,21 @@ public class LinkedList<T> implements ListADT<T> {
         if (index < 0) {
             throw new IndexOutOfBoundsException("Index should be bigger than -1");
         }
-        LinearNode <T> t = new LinearNode <>(element);
+        LinearNode<T> t = new LinearNode<>(element);
         if (head == null) {
             head = t;
             count += 1;
         } else if (index == 0) {
-            LinearNode <T> temp = head;
+            LinearNode<T> temp = head;
             head = t;
             t.setNext(temp);
             count += 1;
         } else {
-            LinearNode <T> cur = head;
+            LinearNode<T> cur = head;
             for (int i = 0; i < index - 1; i++) {
                 cur = cur.getNext();
             }
-            LinearNode <T> oldNext = cur.getNext();
+            LinearNode<T> oldNext = cur.getNext();
 
             // last element
             if (oldNext == null) {
@@ -62,16 +62,16 @@ public class LinkedList<T> implements ListADT<T> {
         if (element == null) {
             throw new IllegalArgumentException("No nulls allowed");
         }
-        LinearNode <T> t = new LinearNode <>(element);
+        LinearNode<T> t = new LinearNode<>(element);
         if (head == null) {
             head = t;
             count += 1;
         } else {
-            LinearNode <T> cur = head;
+            LinearNode<T> cur = head;
             for (int i = 0; i < count - 1; i++) {
                 cur = cur.getNext();
             }
-            LinearNode <T> oldNext = cur.getNext();
+            LinearNode<T> oldNext = cur.getNext();
 
             if (oldNext == null) {
                 cur.setNext(t);
@@ -94,7 +94,7 @@ public class LinkedList<T> implements ListADT<T> {
         if (index < 0) {
             throw new IndexOutOfBoundsException("Index should be bigger than -1");
         }
-        LinearNode <T> cur = head;
+        LinearNode<T> cur = head;
         for (int i = 0; i < index; i++) {
             cur = cur.getNext();
         }
@@ -110,7 +110,7 @@ public class LinkedList<T> implements ListADT<T> {
         if (index < 0) {
             throw new IndexOutOfBoundsException("Index should be bigger than -1");
         }
-        LinearNode <T> cur = head;
+        LinearNode<T> cur = head;
         for (int i = 0; i < index; i++) {
             cur = cur.getNext();
         }
@@ -122,11 +122,11 @@ public class LinkedList<T> implements ListADT<T> {
         if (index > count - 1 || index < 0) {
             throw new IndexOutOfBoundsException("Index does not exist");
         }
-        LinearNode <T> cur = head;
+        LinearNode<T> cur = head;
 
         if (index == 0) {
             // remove head
-            LinearNode <T> temp = head;
+            LinearNode<T> temp = head;
             if (head.getNext() != null) {
                 head = head.getNext();
             } else {
@@ -140,14 +140,14 @@ public class LinkedList<T> implements ListADT<T> {
             cur = cur.getNext();
         }
         if (cur.getNext().getNext() == null) {
-            LinearNode <T> temp = cur.getNext();
+            LinearNode<T> temp = cur.getNext();
             cur.setNext(null);
             count -= 1;
             return temp.getElement();
         }
 
-        LinearNode <T> oldNext = cur.getNext().getNext();
-        LinearNode <T> temp = cur.getNext();
+        LinearNode<T> oldNext = cur.getNext().getNext();
+        LinearNode<T> temp = cur.getNext();
         cur.setNext(oldNext);
         count -= 1;
         return temp.getElement();
@@ -165,12 +165,12 @@ public class LinkedList<T> implements ListADT<T> {
         }
         if (index == 0) {
             // remove head
-            LinearNode <T> t = head;
+            LinearNode<T> t = head;
             head = head.getNext();
             count -= 1;
             return t.getElement();
         }
-        LinearNode <T> cur = head;
+        LinearNode<T> cur = head;
         for (int i = 0; i < index - 1; i++) {
             cur = cur.getNext();
         }
@@ -178,12 +178,12 @@ public class LinkedList<T> implements ListADT<T> {
 //        System.out.println("Trying to remove right of " + cur.getElement());
 
         if (cur.getNext().getNext() == null) {
-            LinearNode <T> temp = cur.getNext();
+            LinearNode<T> temp = cur.getNext();
             cur.setNext(null);
             count -= 1;
             return temp.getElement();
         }
-        LinearNode <T> temp = cur.getNext();
+        LinearNode<T> temp = cur.getNext();
         cur.setNext(temp.getNext());
         count -= 1;
         return temp.getElement();
@@ -194,7 +194,7 @@ public class LinkedList<T> implements ListADT<T> {
         if (element == null) {
             throw new IllegalArgumentException("Null not allowed");
         }
-        LinearNode <T> cur = head;
+        LinearNode<T> cur = head;
         for (int i = 0; i < count; i++) {
             if (cur.getElement().equals(element)) {
                 return i;
@@ -209,7 +209,7 @@ public class LinkedList<T> implements ListADT<T> {
         if (element == null) {
             throw new IllegalArgumentException("No nulls allowed");
         }
-        LinearNode <T> cur = head;
+        LinearNode<T> cur = head;
         for (int i = 0; i < count; i++) {
             if (cur.getElement().equals(element)) {
                 return true;
@@ -233,11 +233,11 @@ public class LinkedList<T> implements ListADT<T> {
         return count;
     }
 
-    public LinearNode <T> getNode(int index) throws IllegalStateException {
+    public LinearNode<T> getNode(int index) throws IllegalStateException {
         if (index > count - 1 || index < 0) {
             throw new IllegalStateException("Index does not exist");
         }
-        LinearNode <T> cur = head;
+        LinearNode<T> cur = head;
         for (int i = 0; i < index; i++) {
             cur = cur.getNext();
         }
@@ -250,7 +250,7 @@ public class LinkedList<T> implements ListADT<T> {
             return "List is empty";
         }
 
-        LinearNode <T> l = head;
+        LinearNode<T> l = head;
         s.append(l.getElement());
 
         while (l.getNext() != null) {

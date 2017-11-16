@@ -19,7 +19,6 @@ import java.util.GregorianCalendar;
  * @version 1.0
  */
 
-
 public class HotelController implements Serializable {
 
     private Model model;
@@ -29,7 +28,6 @@ public class HotelController implements Serializable {
     public HotelController(MainGuiWindow mg) {
         this.mg = mg;
         model = new Model(mg);
-        //"10.152.204.9"
         client = new Client("localhost", 6789);
     }
 
@@ -46,65 +44,6 @@ public class HotelController implements Serializable {
         return totalPrice;
     }
 
-//    private common.Price price;
-//    private FileAdapter fileAdapter;
-//
-//    /**
-//     * No-argument constructor. Used to initialize client.HotelController.
-//     */
-//    public client.HotelController() {
-//        fileAdapter = new FileAdapter();
-//        this.price = new common.Price();
-//    }
-//
-//    /**
-//     * Check in method. Used to check in a reservation.
-//     *
-//     * @param reservation takes specific reservation.
-//     * @param roomNumber  takes specific room number.
-//     */
-//    public void checkIn(common.Reservation reservation, int roomNumber) {
-//        fileAdapter.removeSingleObjectFromFile("reservations.bin", reservation);
-//        reservation.setRoomNumber(roomNumber);
-//        fileAdapter.appendToFile("inHouseGuests.bin", reservation);
-//    }
-//
-//    /**
-//     * Check out method. Used to check out person.
-//     *
-//     * @param reservation takes specific reservation.
-//     */
-//
-//    public void checkOut(common.Reservation reservation) {
-//        fileAdapter.removeSingleObjectFromFile("inHouseGuests.bin", reservation);
-//        fileAdapter.appendToFile("pastReservations.bin", reservation);
-//    }
-//
-//
-//    /**
-//     * Total price method. Used to calculate the price upon check out.
-//     *
-//     * @param reservation takes specific reservation.
-//     * @param discount    takes discount so calculates the price upon check out.
-//     * @return price common.Price with the discount.
-//     */
-//    public String getTotalPrice(common.Reservation reservation, double discount) {
-//
-//        Calendar cal = new GregorianCalendar(reservation.getArrival().getCheckInDate().getYear(),
-//                reservation.getArrival().getCheckInDate().getMonth() - 1,
-//                reservation.getArrival().getCheckInDate().getDay());
-//        Calendar cal2 = new GregorianCalendar(reservation.getDeparture().getCheckOutDate().getYear(),
-//                reservation.getDeparture().getCheckOutDate().getMonth() - 1,
-//                reservation.getDeparture().getCheckOutDate().getDay());
-//        int total = cal2.get(Calendar.DAY_OF_YEAR) - cal.get(Calendar.DAY_OF_YEAR);
-//        double totalPrice = price.getRoomPrice(reservation.getRoomType()) * total;
-//        if (discount == 0) {
-//            return String.valueOf(totalPrice);
-//        }
-//        double finalPrice = Math.round((discount * totalPrice) / 100);
-//        return String.valueOf(totalPrice - finalPrice);
-//    }
-
     /**
      * Create reservation method. Used to create reservation and save it in the system.
      *
@@ -120,7 +59,6 @@ public class HotelController implements Serializable {
             Request r = new Request("get all", null);
             client.sendRequest(r, model);
         }
-
         return model.getReservations();
     }
 
@@ -134,14 +72,12 @@ public class HotelController implements Serializable {
         return model.getInHouse();
     }
 
-
     // used for pastReservations.bin
     public Reservation[] getPastReservations() {
         if (model.getPastReservations() == null) {
             Request r = new Request("past", null);
             client.sendRequest(r, model);
         }
-
         return model.getPastReservations();
     }
 
@@ -198,7 +134,6 @@ public class HotelController implements Serializable {
         Reservation[] compareInHouseReservations = model.getInHouse();
         compare.addAll(Arrays.asList(compareFutureReservations));
         compare.addAll(Arrays.asList(compareInHouseReservations));
-        System.out.println(compare);
         for (int i = 0; i < compare.size(); i++) {
             if (!(compare.get(i).getDeparture().getCheckOutDate().isBefore(arrival))
                     && (compare.get(i).getArrival().getCheckInDate().isBefore(departure))) {
@@ -278,7 +213,6 @@ public class HotelController implements Serializable {
         Reservation[] compareInHouseReservations = model.getInHouse();
         compare.addAll(Arrays.asList(compareFutureReservations));
         compare.addAll(Arrays.asList(compareInHouseReservations));
-        System.out.println(compare);
         for (int i = 0; i < compare.size(); i++) {
             if (!(compare.get(i).getDeparture().getCheckOutDate().isBefore(arrival))
                     && (compare.get(i).getArrival().getCheckInDate().isBefore(departure))) {

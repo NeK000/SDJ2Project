@@ -66,7 +66,6 @@ public class CreateReservationWindowGUI {
         this.parent = parent;
 
         left();
-
         takeAllGuest();
         right();
         prepareGUI();
@@ -194,7 +193,7 @@ public class CreateReservationWindowGUI {
                 } else {
                     firstNameLabel.setText("First name");
                 }
-                // arrival, departure is checked when pressing save
+                // Arrival, departure is checked when pressing save
                 if (!(isValidDate(arrival.getText()))) {
                     arrivalLabel.setText("<html><font color='black'>Arrival (dd/mm/yyyy) </font> <font color='red'>" +
                             "please use the format provided</font></html>");
@@ -237,7 +236,6 @@ public class CreateReservationWindowGUI {
             // If pressed uses the method valueChanged that gives you a specific reservation.
             // After that fills up the text fields with the value of that reservation.
             // Depending from which tab is pressed fills up different data.
-
             else if (e.getSource() == choose) {
                 firstName.setText(chosenReservation.getGuest().getName().getFirstName());
                 middleName.setText(chosenReservation.getGuest().getName().getMiddleName());
@@ -271,13 +269,6 @@ public class CreateReservationWindowGUI {
                     parent.setSelectedIndex(0);
                 }
             }
-
-            // Check if the remove button is pressed. If pressed removes a specific reservation from the file . Used to cancel reservation.
-            else if (e.getSource() == remove) {
-
-                // toDo ( Yusuf ) No file adapter .. so i commented below code.
-//                fa.removeSingleObjectFromFile("reservations.bin", chosenReservation);
-            }
         }
 
     }
@@ -290,8 +281,6 @@ public class CreateReservationWindowGUI {
         }
 
         public void keyPressed(KeyEvent e) {
-
-
         }
 
         /**
@@ -572,10 +561,6 @@ public class CreateReservationWindowGUI {
 
         Reservation reservation = new Reservation(guest, arr, dep, roomType_, bookingInitiator_,
                 lateArraivalNotice_, priorityGuest_);
-
-        // toDo ( Yusuf ) No file adapter .. so i commented below code.
-//        fa.removeSingleObjectFromFile("reservations.bin", r);
-//        fa.appendToFile("reservations.bin", reservation);
         Reservation old = r;
         hc.updateReservation(r, reservation);
 

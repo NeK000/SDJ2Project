@@ -669,9 +669,7 @@ public class LinkedListTest {
                 }
             } catch (IndexOutOfBoundsException g) {
 
-                list.add(list.size() + 3, dataGenrator.makeNewReservation());// TODO:
-                // handle
-                // exception
+                list.add(list.size() + 3, dataGenrator.makeNewReservation());
             }
 
         }

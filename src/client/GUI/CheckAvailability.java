@@ -3,7 +3,6 @@ package client.GUI;
 import client.HotelController;
 import common.DateHandler;
 import common.Reservation;
-import javafx.scene.layout.BorderPane;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -15,7 +14,6 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * @author Catalin Udrea
@@ -89,7 +87,6 @@ public class CheckAvailability {
 
         toField = new JTextField();
         toField.setPreferredSize(new Dimension(100, 25));
-        // toDo ( Yusuf ) I commented below code. Don't ask why.
         toField.addKeyListener(new KeyPressEvent());
         fromField.addKeyListener(new KeyPressEvent());
 
@@ -116,7 +113,6 @@ public class CheckAvailability {
      * @param d2 DateHandler object representing departure date
      */
 
-    // toDo ( Yusuf ) I commented below code. Don't ask why.
     private void displayRooms(DateHandler d1, DateHandler d2) {
 
         String s = hc.getAvailabilityFromDateInterval(d1, d2);

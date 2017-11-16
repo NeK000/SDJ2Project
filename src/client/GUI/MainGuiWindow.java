@@ -1,7 +1,8 @@
 package client.GUI;
 
 import client.HotelController;
-import common.*;
+import common.DateHandler;
+import common.Reservation;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -82,6 +83,7 @@ public class MainGuiWindow {
 
     private Object[][] arrCol;
     private Object[][] depCol;
+
     /**
      * This method will call the refresh method each time the "Home" tab is pressed.
      *
@@ -101,8 +103,7 @@ public class MainGuiWindow {
     public MainGuiWindow() {
         this.hc = new HotelController(this);
 
-        // update The model
-
+        // update the model
         hc.getInHouse();
 
         try {
@@ -259,7 +260,8 @@ public class MainGuiWindow {
         searchPanelLeft.add(leftSearchLabel, BorderLayout.WEST);
         searchPanelLeft.add(leftSearch, BorderLayout.EAST);
         left.add(searchPanelLeft, BorderLayout.NORTH);
-        //Right
+
+        // Right
         rightSearch = new JTextField(10);
         rightSearch.addKeyListener(depPresser);
         searchPanelRight = new JPanel();
@@ -276,7 +278,6 @@ public class MainGuiWindow {
         buttonPanelRight.setPreferredSize(new Dimension(500, 50));
         buttonPanelRight.add(rightButton);
         right.add(buttonPanelRight, BorderLayout.SOUTH);
-
 
         //Left
         leftButton = new JButton("Check In");
@@ -416,6 +417,7 @@ public class MainGuiWindow {
      *
      * @param departures an ArrayList of Reservation objects
      */
+
     public void getAllDeparturesForToday(ArrayList<Reservation> departures) {
         depCol = new Object[departures.size()][5];
 
@@ -440,7 +442,6 @@ public class MainGuiWindow {
     public void getArrivalsForToday() {
         ArrayList<Reservation> reservations = new ArrayList<>();
         reservations.addAll(Arrays.asList(hc.getAllReservations()));
-//        ArrayList<Reservation> reservations = adapter.getAllGuests("reservations.bin");
         DateHandler d = new DateHandler(1, 1, 1);
         for (int i = 0; i < reservations.size(); i++) {
             if (reservations.get(i).getArrival().getCheckInDate().equals(d.currentDate())) {
@@ -457,7 +458,6 @@ public class MainGuiWindow {
     public void getDeparturesForToday() {
         ArrayList<Reservation> inHouse = new ArrayList<>();
         inHouse.addAll(Arrays.asList(hc.getInHouse()));
-//        ArrayList<Reservation> inHouse = adapter.getAllGuests("inHouseGuests.bin");
         DateHandler d = new DateHandler(1, 1, 1);
         for (int i = 0; i < inHouse.size(); i++) {
             if (inHouse.get(i).getDeparture().getCheckOutDate().equals(d.currentDate())) {
@@ -522,14 +522,13 @@ public class MainGuiWindow {
     }
 
     // Event listeners for search
-    //Arrivals Search
+    // Arrivals Search
     class arrSearch implements KeyListener {
         public void keyTyped(KeyEvent e) {
         }
 
 
         public void keyPressed(KeyEvent e) {
-
         }
 
         /**
@@ -548,8 +547,6 @@ public class MainGuiWindow {
                 }
             }
             getAllArrivalsForToday(foundNames);
-
-
         }
     }
 
@@ -579,10 +576,6 @@ public class MainGuiWindow {
                 }
             }
             getAllDeparturesForToday(foundNames);
-
-
         }
     }
-
-
 }
